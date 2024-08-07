@@ -14,11 +14,11 @@ datasource db {
 }
 
 model Patient {
-  id               String   @id @default(uuid())
+  id               String         @id @default(uuid())
   firstName        String
   middleName       String
   lastName         String
-  gender           Gender
+  sex              Sex
   birthDate        DateTime
   region           String
   city             String
@@ -29,6 +29,10 @@ model Patient {
   occupation       String?
   emergencyContact String?
   bloodType        String?
+  patientRecord    PatientRecord?
+  doctor           Doctor?        @relation(fields: [doctorId], references: [id])
+  doctorId         String?
+  appointments     Appointment[]
 }
 
 model PatientRecord {
@@ -36,10 +40,91 @@ model PatientRecord {
   patientType      String   @default("Out")
   patientCondition String
   allergies        String[]
-  familyHistory    String
+  familyHistory    String?
+  height           Float?
+  weight           Float?
+  bloodPressure    Float?
+  temperature      Float?
+  patient          Patient  @relation(fields: [patientId], references: [id])
+  patientId        String   @unique
 }
 
-enum Gender {
+model Appointment {
+  id          String   @id @default(uuid())
+  type        String
+  datetime    DateTime
+  scheduledAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  patient     Patient  @relation(fields: [patientId], references: [id])
+  doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  patientId   String
+  doctorId    String
+}
+
+model Staff {
+  id               String           @id @default(uuid())
+  username         String           @unique
+  password         String
+  firstName        String
+  middleName       String
+  lastName         String
+  sex              Sex
+  birthDate        DateTime
+  region           String
+  city             String
+  woreda           String
+  kebele           Int?
+  mobileNumber     String
+  email            String
+  role             Role             @relation(fields: [roleId], references: [id])
+  specialization   String?
+  hireDate         DateTime         @default(now())
+  emergencyContact String?
+  employmentStatus EmploymentStatus
+  notes            String[]
+  doctor           Doctor?
+  department       Department?      @relation(fields: [departmentId], references: [id])
+  departmentId     String?
+  roleId           String
+}
+
+model Doctor {
+  id           String        @id @default(uuid())
+  patients     Patient[]
+  staff        Staff         @relation(fields: [staffId], references: [id])
+  staffId      String        @unique
+  appointments Appointment[]
+}
+
+model Role {
+  id          String        @id @default(uuid())
+  name        String
+  staff       Staff[]
+  permissions Persmission[]
+}
+
+model Department {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  staff       Staff[]
+}
+
+model Persmission {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  role        Role    @relation(fields: [roleId], references: [id])
+  roleId      String
+}
+
+enum Sex {
   MALE
   FEMALE
+}
+
+enum EmploymentStatus {
+  Active
+  OnLeave
+  Retired
 }
