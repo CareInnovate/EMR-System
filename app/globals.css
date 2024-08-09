@@ -16,3 +16,6 @@ td {
 aside {
 	box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 4px;
 }
+.sign-in-form {
+	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}

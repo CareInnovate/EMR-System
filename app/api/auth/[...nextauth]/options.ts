@@ -35,7 +35,7 @@ export const options: NextAuthOptions = {
 					credentials?.phoneNo as string,
 					credentials?.password as string
 				);
-
+				console.log("Been here");
 				// If no error and we have user data, return it
 				if (user) {
 					return user;
@@ -45,4 +45,7 @@ export const options: NextAuthOptions = {
 			},
 		}),
 	],
+	pages: {
+		signIn: "/signin",
+	},
 };
