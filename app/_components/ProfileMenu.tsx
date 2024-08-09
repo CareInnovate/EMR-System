@@ -11,7 +11,7 @@ import { useState } from "react";
 const ProfileMenu = () => {
 	const [open, setOpen] = useState(false);
 	return (
-		<div className="relative flex flex-col">
+		<div className="relative flex flex-col z-20">
 			<FontAwesomeIcon
 				icon={faUserCircle}
 				width={30}

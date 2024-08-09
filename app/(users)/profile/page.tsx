@@ -1,3 +1,5 @@
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Profile() {
 	return (
 		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
@@ -44,24 +46,34 @@ export default function Profile() {
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">Birmingham, England</p>
-						<button>Edit</button>
+						<button>
+							<FontAwesomeIcon icon={faEdit} />
+						</button>
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">111-255-2552</p>
-						<button>Edit</button>
+						<button>
+							<FontAwesomeIcon icon={faEdit} />
+						</button>
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">thomashelby@gmail.com</p>
-						<button>Edit</button>
+						<button>
+							<FontAwesomeIcon icon={faEdit} />
+						</button>
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">222-255-2552</p>
 
-						<button>Edit</button>
+						<button>
+							<FontAwesomeIcon icon={faEdit} />
+						</button>
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">Business Man</p>
-						<button>Edit</button>
+						<button>
+							<FontAwesomeIcon icon={faEdit} />
+						</button>
 					</div>
 					<div className="flex justify-between w-2/3">
 						<p className="p-2">B</p>

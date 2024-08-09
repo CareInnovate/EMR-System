@@ -1,3 +1,6 @@
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 export default function Appointments() {
 	return (
 		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
@@ -17,8 +20,18 @@ export default function Appointments() {
 						<td className="text-center">10/12/2024</td>
 						<td className="text-center">08:00</td>
 						<td className="text-center">
-							<button>Edit</button>
-							<button>Delete</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faEdit}
+									className="mr-4"
+								/>
+							</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faTrash}
+									className="text-red-700"
+								/>
+							</button>
 						</td>
 					</tr>
 					<tr>
@@ -26,8 +39,18 @@ export default function Appointments() {
 						<td className="text-center">10/12/2024</td>
 						<td className="text-center">08:00</td>
 						<td className="text-center">
-							<button>Edit</button>
-							<button>Delete</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faEdit}
+									className="mr-4"
+								/>
+							</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faTrash}
+									className="text-red-700"
+								/>
+							</button>
 						</td>
 					</tr>
 					<tr>
@@ -35,8 +58,18 @@ export default function Appointments() {
 						<td className="text-center">10/12/2024</td>
 						<td className="text-center">08:00</td>
 						<td className="text-center">
-							<button>Edit</button>
-							<button>Delete</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faEdit}
+									className="mr-4"
+								/>
+							</button>
+							<button>
+								<FontAwesomeIcon
+									icon={faTrash}
+									className="text-red-700"
+								/>
+							</button>
 						</td>
 					</tr>
 				</tbody>

@@ -24,8 +24,9 @@ model Patient {
   city             String
   woreda           String
   kebele           Int?
-  mobileNumber     String
-  email            String?
+  mobileNumber     String         @unique
+  password         String
+  email            String?        @unique
   occupation       String?
   emergencyContact String?
   bloodType        String?
@@ -74,8 +75,8 @@ model Staff {
   city             String
   woreda           String
   kebele           Int?
-  mobileNumber     String
-  email            String
+  mobileNumber     String           @unique
+  email            String           @unique
   role             Role             @relation(fields: [roleId], references: [id])
   specialization   String?
   hireDate         DateTime         @default(now())
@@ -98,7 +99,7 @@ model Doctor {
 
 model Role {
   id          String        @id @default(uuid())
-  name        String
+  name        String        @unique
   staff       Staff[]
   permissions Persmission[]
 }
@@ -116,6 +117,13 @@ model Persmission {
   description String?
   role        Role    @relation(fields: [roleId], references: [id])
   roleId      String
+}
+
+model OTP {
+  mobileNumber String
+  passcode     String
+
+  @@unique([mobileNumber, passcode])
 }
 
 enum Sex {
