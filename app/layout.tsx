@@ -20,8 +20,10 @@ export default function RootLayout({
 		<html lang="en">
 			<body className={inter.className}>
 				<Nav />
-				<Aside />
-				{children}
+				<div className="w-full absolute top-0 flex h-[100vh] items-start justify-start">
+					<Aside />
+					{children}
+				</div>
 			</body>
 		</html>
 	);

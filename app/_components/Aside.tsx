@@ -23,7 +23,7 @@ const Aside = () => {
 	const [open, setOpen] = useState(false);
 	return (
 		<aside
-			className={`absolute top-0 ${
+			className={` top-0 ${
 				open ? "w-72" : "w-24"
 			} p-5 flex flex-col gap-2 text-lg left-0 bg-white h-full transition-all`}
 		>
