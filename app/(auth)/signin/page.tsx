@@ -66,6 +66,6 @@ async function handleSubmit(
 		phoneNo: data.phoneNo,
 		password: data.password,
 		redirect: true,
-		callbackUrl: callbackUrl,
+		callbackUrl: callbackUrl ?? "/",
 	});
 }

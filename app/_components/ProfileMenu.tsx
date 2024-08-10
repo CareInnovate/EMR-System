@@ -6,6 +6,7 @@ import {
 	faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { signOut } from "next-auth/react";
 import { useState } from "react";
 
 const ProfileMenu = () => {
@@ -28,7 +29,10 @@ const ProfileMenu = () => {
 						<FontAwesomeIcon icon={faLock} />
 						<span>Change Password</span>
 					</div>
-					<div className="w-full hover:bg-blue-950 hover:text-white px-5 py-2 cursor-pointer rounded-md flex gap-3 items-center">
+					<div
+						className="w-full hover:bg-blue-950 hover:text-white px-5 py-2 cursor-pointer rounded-md flex gap-3 items-center"
+						onClick={() => signOut()}
+					>
 						<FontAwesomeIcon icon={faUser} />
 						<span>Logout</span>
 					</div>
