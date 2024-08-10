@@ -1,7 +1,8 @@
 import getUserByPhone from "@/app/utils/user";
-import { NextAuthOptions } from "next-auth";
+import { Patient } from "@prisma/client";
+import { Account, NextAuthOptions } from "next-auth";
+import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
-import Github from "next-auth/providers/github";
 
 export const options: NextAuthOptions = {
 	providers: [
@@ -35,9 +36,10 @@ export const options: NextAuthOptions = {
 					credentials?.phoneNo as string,
 					credentials?.password as string
 				);
+
 				// If no error and we have user data, return it
 				if (user) {
-					return user;
+					return { ...user, role: "patient" };
 				}
 				// Return null if user data could not be retrieved
 				return null;
@@ -46,5 +48,22 @@ export const options: NextAuthOptions = {
 	],
 	pages: {
 		signIn: "/signin",
+	},
+	callbacks: {
+		async jwt({ account, token, user }) {
+			if (account) {
+				token.name = user.firstName;
+				token.id = user.id;
+				token.role = "patient";
+				token.email = user.email;
+			}
+			console.log(token);
+			return token;
+		},
+		async session({ session, token, user }) {
+			session.user.name = token.name as string;
+			session.user.role = token.role as string;
+			return session;
+		},
 	},
 };

@@ -6,13 +6,15 @@ import {
 	faUserCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Session } from "next-auth";
 import { signOut } from "next-auth/react";
 import { useState } from "react";
 
-const ProfileMenu = () => {
+const ProfileMenu = ({ user }: { user: Session }) => {
 	const [open, setOpen] = useState(false);
 	return (
-		<div className="relative flex flex-col z-20">
+		<div className="relative flex z-20 items-center gap-3">
+			<p className="text-sm text-gray-700">Hi, {user?.user.name}</p>
 			<FontAwesomeIcon
 				icon={faUserCircle}
 				width={30}
