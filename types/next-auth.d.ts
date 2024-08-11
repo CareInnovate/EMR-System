@@ -1,5 +1,6 @@
 import { Patient, Staff } from "@prisma/client";
 import NextAuth, { DefaultUser } from "next-auth";
+import { DefaultJWT } from "next-auth/jwt";
 
 declare module "next-auth" {
 	/**
@@ -10,7 +11,14 @@ declare module "next-auth" {
 			/** The user's name. */
 			name: string;
 			role: string;
+			id: string;
 		};
+	}
+	interface JWT extends DefaultJWT {
+		name: string;
+		id: string;
+		role: string;
+		email: string;
 	}
 	interface User extends Patient, DefaultUser {}
 }

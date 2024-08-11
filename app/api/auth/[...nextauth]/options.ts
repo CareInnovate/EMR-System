@@ -55,12 +55,12 @@ export const options: NextAuthOptions = {
 				token.role = "patient";
 				token.email = user.email;
 			}
-			console.log(token);
 			return token;
 		},
 		async session({ session, token, user }) {
 			session.user.name = token.name as string;
-			session.user.role = token.role as string;
+			session.user.role = "patient";
+			session.user.id = token.id as string;
 			return session;
 		},
 	},
