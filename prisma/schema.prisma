@@ -14,26 +14,28 @@ datasource db {
 }
 
 model Patient {
-  id               String         @id @default(uuid())
-  firstName        String
-  middleName       String
-  lastName         String
-  sex              Sex
-  birthDate        DateTime
-  region           String
-  city             String
-  woreda           String
-  kebele           Int?
-  mobileNumber     String         @unique
-  password         String
-  email            String?        @unique
-  occupation       String?
-  emergencyContact String?
-  bloodType        String?
-  patientRecord    PatientRecord?
-  doctor           Doctor?        @relation(fields: [doctorId], references: [id])
-  doctorId         String?
-  appointments     Appointment[]
+  id                       String         @id @default(uuid())
+  firstName                String
+  middleName               String
+  lastName                 String
+  sex                      Sex
+  birthDate                DateTime
+  region                   String
+  city                     String
+  woreda                   String
+  kebele                   Int?
+  mobileNumber             String         @unique
+  password                 String
+  email                    String?        @unique
+  occupation               String?
+  emergencyContactName     String?
+  emergencyContactMobileNo String?
+  bloodType                String?
+  patientRecord            PatientRecord?
+  doctor                   Doctor?        @relation(fields: [doctorId], references: [id])
+  doctorId                 String?
+  appointments             Appointment[]
+  Invoice                  Invoice[]
 }
 
 model PatientRecord {
@@ -126,6 +128,45 @@ model OTP {
   @@unique([mobileNumber, passcode])
 }
 
+model Medication {
+  id                 String               @id @default(uuid())
+  name               String
+  description        String?
+  price              Float
+  available          Int
+  Invoice_Medication Invoice_Medication[]
+}
+
+model Invoice_Medication {
+  id           String     @id @default(uuid())
+  quantity     Int        @default(1)
+  invoice      Invoice    @relation(fields: [invoiceId], references: [id])
+  medication   Medication @relation(fields: [medicationId], references: [id])
+  invoiceId    String
+  medicationId String
+
+  @@unique([invoiceId, medicationId])
+}
+
+model Service {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  description String
+  price       Float
+  invoices    Invoice[]
+}
+
+model Invoice {
+  id                 String               @id @default(uuid())
+  status             InvoiceStatus        @default(Unpaid)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  patient            Patient              @relation(fields: [patientId], references: [id])
+  services           Service[]
+  patientId          String
+  Invoice_Medication Invoice_Medication[]
+}
+
 enum Sex {
   MALE
   FEMALE
@@ -135,4 +176,9 @@ enum EmploymentStatus {
   Active
   OnLeave
   Retired
+}
+
+enum InvoiceStatus {
+  Paid
+  Unpaid
 }

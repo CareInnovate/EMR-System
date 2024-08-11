@@ -1,7 +1,5 @@
 import getUserByPhone from "@/app/utils/user";
-import { Patient } from "@prisma/client";
-import { Account, NextAuthOptions } from "next-auth";
-import { JWT } from "next-auth/jwt";
+import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 export const options: NextAuthOptions = {
