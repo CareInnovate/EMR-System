@@ -15,7 +15,7 @@ export async function registerPatient(formData: FormData) {
 			sex: "MALE",
 			woreda: "",
 			occupation: "Business Man",
-			emergencyContact: "Thomas Shelby",
+			emergencyContactName: "Thomas Shelby",
 			password: "",
 		},
 	});
