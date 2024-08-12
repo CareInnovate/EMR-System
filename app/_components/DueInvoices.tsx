@@ -11,7 +11,7 @@ type data = {
 const DueInvoices = ({ data }: data) => {
 	const { services, medications, serviceTotal, medicationTotal } = data;
 	return (
-		<div className="h-full">
+		<div className="w-full flex flex-col items-center gap-6">
 			{services.length !== 0 && (
 				<table className="w-3/4 text-lg bg-red-100">
 					<thead>
@@ -54,7 +54,7 @@ const DueInvoices = ({ data }: data) => {
 				</table>
 			)}
 			{services.length === 0 && medications.length === 0 ? (
-				<div className="h-3/4 flex items-center text-xl text-gray-600">
+				<div className="h-[70vh] flex items-center text-xl text-gray-600">
 					<p>You are caught up with your fees</p>
 				</div>
 			) : (
