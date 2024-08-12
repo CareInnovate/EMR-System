@@ -25,7 +25,7 @@ const Aside = () => {
 		<aside
 			className={`top-0 ${
 				open ? "w-72" : "w-24"
-			} p-5 flex flex-col gap-2 text-lg left-0 bg-white h-full transition-all`}
+			} p-5 flex flex-col gap-2 text-lg left-0 bg-white h-full transition-all fixed`}
 		>
 			<div
 				className={`mb-8 p-2 flex ${
