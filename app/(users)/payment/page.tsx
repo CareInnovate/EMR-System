@@ -16,8 +16,10 @@ export default async function Payment() {
 	}: { dueInvoices: invoices[]; paidInvoices: invoices[] } = await res.json();
 
 	return (
-		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
-			<h1 className="text-4xl mb-5 w-3/4 text-left">Due Payment</h1>
+		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
+			<h1 className="text-2xl mb-5 w-full text-left sm:w-3/4 sm:text-4xl">
+				Due Payment
+			</h1>
 			<DueInvoices data={separateInvoices(dueInvoices)} />
 			{paidInvoices.length > 0 && (
 				<PaidInvoices paidInvoices={paidInvoices} />

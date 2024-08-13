@@ -3,9 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Appointments() {
 	return (
-		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
-			<h1 className="text-4xl mb-5 w-3/4 text-left">My Appointments</h1>
-			<table className="w-3/4 text-lg bg-red-100">
+		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
+			<h1 className="text-2xl sm:text-4xl mb-5 w-full sm:w-3/4 text-left">
+				My Appointments
+			</h1>
+			<table className="w-full sm:w-3/4 text-sm sm:text-lg bg-red-100">
 				<thead>
 					<tr className="text-xl p-14">
 						<th>Doctor</th>

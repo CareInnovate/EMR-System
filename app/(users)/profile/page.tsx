@@ -2,82 +2,82 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export default function Profile() {
 	return (
-		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
-			<h1 className="text-4xl mb-5 w-3/4 text-left">My Profile</h1>
-			<div className="flex w-3/4">
-				<div className="min-w-32 w-max flex flex-col gap-1 text-lg font-bold">
-					<div>
-						<p className="bg-slate-200 p-2">FullName</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Age</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Sex</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Address</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Mobile No.</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Email</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Emergency Contact</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Occupation</p>
-					</div>
-					<div>
-						<p className="bg-slate-200 p-2">Blood Type</p>
-					</div>
+		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
+			<h1 className="text-2xl sm:text-4xl mb-5 w-full sm:w-3/4 text-left">
+				My Profile
+			</h1>
+			<div className="flex w-full sm:w-3/4 flex-col gap-1 text-sm sm:text-lg break-words">
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						FullName
+					</p>
+					<p className="p-2 w-3/5 max-w-96">Thomas Shelby</p>
 				</div>
-				<div className="w-1/2 flex flex-col gap-1 text-lg">
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">Thomas Shelby</p>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">32</p>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">Male</p>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">Birmingham, England</p>
-						<button>
-							<FontAwesomeIcon icon={faEdit} />
-						</button>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">111-255-2552</p>
-						<button>
-							<FontAwesomeIcon icon={faEdit} />
-						</button>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">thomashelby@gmail.com</p>
-						<button>
-							<FontAwesomeIcon icon={faEdit} />
-						</button>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">222-255-2552</p>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Age
+					</p>
+					<p className="p-2 w-3/5 max-w-96">32</p>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Sex
+					</p>
+					<p className="p-2 w-3/5 max-w-96">Male</p>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Address
+					</p>
+					<p className="p-2 w-3/5 max-w-96">Birmingham, England</p>
+					<button>
+						<FontAwesomeIcon icon={faEdit} />
+					</button>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Mobile No.
+					</p>
+					<p className="p-2 w-3/5 max-w-96">111-255-2552</p>
+					<button>
+						<FontAwesomeIcon icon={faEdit} />
+					</button>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Email
+					</p>
+					<p className="p-2 w-3/5 max-w-96 text-wrap ">
+						thomashelby@gmail.com
+					</p>
+					<button>
+						<FontAwesomeIcon icon={faEdit} />
+					</button>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Emergency Contact
+					</p>
+					<p className="p-2 w-3/5 max-w-96">222-255-2552</p>
+					<button>
+						<FontAwesomeIcon icon={faEdit} />
+					</button>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Occupation
+					</p>
+					<p className="p-2 w-3/5 max-w-96">Business Man</p>
+					<button>
+						<FontAwesomeIcon icon={faEdit} />
+					</button>
+				</div>
+				<div className="flex">
+					<p className="bg-slate-200 p-2 w-1/3 max-w-48 font-bold">
+						Blood Type
+					</p>
 
-						<button>
-							<FontAwesomeIcon icon={faEdit} />
-						</button>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">Business Man</p>
-						<button>
-							<FontAwesomeIcon icon={faEdit} />
-						</button>
-					</div>
-					<div className="flex justify-between w-2/3">
-						<p className="p-2">B</p>
-					</div>
+					<p className="p-2 w-3/5 max-w-96">B</p>
 				</div>
 			</div>
 		</main>

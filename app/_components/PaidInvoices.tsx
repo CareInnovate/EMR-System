@@ -4,8 +4,8 @@ import { faReceipt } from "@fortawesome/free-solid-svg-icons";
 
 const PaidInvoices = ({ paidInvoices }: { paidInvoices: invoices[] }) => {
 	return (
-		<div className="w-3/4 mb-10">
-			<h1 className="text-4xl mb-5 w-full text-left bg-orange-200 p-5">
+		<div className="w-full sm:w-3/4 mb-10">
+			<h1 className="text-2xl sm:text-4xl mb-5 w-full text-left bg-orange-200 p-5">
 				Payment History
 			</h1>
 			{paidInvoices.map((invoice, ind) => {
@@ -29,7 +29,7 @@ const PaidInvoices = ({ paidInvoices }: { paidInvoices: invoices[] }) => {
 				return (
 					<div
 						key={ind}
-						className="py-5 px-20 w-full flex justify-between text-xl items-center"
+						className="py-5 px-1 sm:px-8 md:px-10 lg:px-20 w-full flex justify-between text-xl items-center"
 					>
 						<div className="flex gap-6 items-center">
 							<FontAwesomeIcon
