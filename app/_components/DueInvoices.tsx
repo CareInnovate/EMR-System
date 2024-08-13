@@ -11,44 +11,62 @@ type data = {
 const DueInvoices = ({ data }: data) => {
 	const { services, medications, serviceTotal, medicationTotal } = data;
 	return (
-		<div className="w-full flex flex-col items-center gap-6">
+		<div className="w-full flex flex-col items-center gap-6 break-words">
 			{services.length !== 0 && (
-				<table className="w-full sm:w-3/4 text-lg bg-red-100">
+				<table className="w-full sm:w-3/4 text-sm sm:text-lg bg-red-100">
 					<thead>
-						<tr className="text-xl p-14">
-							<th className="text-left">Service</th>
-							<th className="text-right">Date</th>
-							<th className="text-right">Price (in ETB)</th>
+						<tr className="text-sm sm:text-xl p-2 sm:p-14">
+							<th className="text-left px-1 sm:px-3">Service</th>
+							<th className="text-right px-1 sm:px-3">Date</th>
+							<th className="text-center px-1 sm:px-3">
+								Price{" "}
+								<span className="text-xs font-normal">
+									(in ETB)
+								</span>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{services}
-						<tr className="text-xl font-bold">
-							<td colSpan={2} className="text-right">
+						<tr className="text-sm sm:text-xl font-bold">
+							<td colSpan={2} className="text-right px-1 sm:px-3">
 								Total
 							</td>
-							<td className="text-right">{serviceTotal}</td>
+							<td className="text-right px-1 sm:px-3">
+								{serviceTotal}
+							</td>
 						</tr>
 					</tbody>
 				</table>
 			)}
 			{medications.length !== 0 && (
-				<table className="w-full sm:w-3/4  text-lg bg-red-100">
+				<table className="w-full sm:w-3/4  text-sm sm:text-lg bg-red-100">
 					<thead>
-						<tr className="text-xl p-14">
+						<tr className="text-sm sm:text-xl p-0 sm:p-14">
 							<th className="text-left">Medication</th>
-							<th className="text-right">Quantity</th>
-							<th className="text-right">Date Prescribed</th>
-							<th className="text-right">Price (in ETB)</th>
+							<th className="text-right px-1 sm:px-3">
+								Quantity
+							</th>
+							<th className="text-right px-1 sm:px-3">
+								Date Prescribed
+							</th>
+							<th className="text-center px-1 sm:px-3">
+								Price{" "}
+								<span className="text-xs font-normal">
+									(in ETB)
+								</span>
+							</th>
 						</tr>
 					</thead>
 					<tbody>
 						{medications}
-						<tr className="text-xl font-bold">
-							<td colSpan={3} className="text-right">
+						<tr className="text-lg sm:text-xl font-bold">
+							<td colSpan={3} className="text-right px-1 sm:px-3">
 								Total
 							</td>
-							<td className="text-right">{medicationTotal}</td>
+							<td className="text-right px-1 sm:px-3">
+								{medicationTotal}
+							</td>
 						</tr>
 					</tbody>
 				</table>

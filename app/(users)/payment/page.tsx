@@ -16,8 +16,8 @@ export default async function Payment() {
 	}: { dueInvoices: invoices[]; paidInvoices: invoices[] } = await res.json();
 
 	return (
-		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
-			<h1 className="text-2xl mb-5 w-full text-left sm:w-3/4 sm:text-4xl">
+		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-5">
+			<h1 className="text-2xl mb-5 w-full text-left sm:w-3/4 sm:text-4xl px-4 sm:px-0">
 				Due Payment
 			</h1>
 			<DueInvoices data={separateInvoices(dueInvoices)} />
@@ -37,11 +37,15 @@ function separateInvoices(invoices: invoices[]) {
 					serviceTotal += service.price;
 					return (
 						<tr key={ind}>
-							<td className="w-3/5">{service.name}</td>
-							<td className="text-right">
+							<td className="w-3/5 px-1 sm:px-3">
+								{service.name}
+							</td>
+							<td className="text-right px-1 sm:px-3">
 								{invoice.createdAt.toString().split("T")[0]}
 							</td>
-							<td className="text-right">{service.price}</td>
+							<td className="text-right px-1 sm:px-3">
+								{service.price}
+							</td>
 						</tr>
 					);
 				})}
@@ -56,12 +60,16 @@ function separateInvoices(invoices: invoices[]) {
 					medicationTotal += inv.quantity * inv.medication.price;
 					return (
 						<tr key={ind}>
-							<td className="w-3/5">{inv.medication.name}</td>
-							<td className="text-right">{inv.quantity}</td>
-							<td className="text-right">
+							<td className="w-3/5 px-1 sm:px-3 ">
+								{inv.medication.name}
+							</td>
+							<td className="text-right px-1 sm:px-3">
+								{inv.quantity}
+							</td>
+							<td className="text-right px-1 sm:px-3">
 								{invoice.createdAt.toString().split("T")[0]}
 							</td>
-							<td className="text-right">
+							<td className="text-right px-1 sm:px-3">
 								{inv.medication.price}
 							</td>
 						</tr>
