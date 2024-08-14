@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Patient {
-  id                       String         @id @default(uuid())
+  id                       String          @id @default(uuid())
   firstName                String
   middleName               String
   lastName                 String
@@ -24,18 +24,19 @@ model Patient {
   city                     String
   woreda                   String
   kebele                   Int?
-  mobileNumber             String         @unique
+  mobileNumber             String          @unique
   password                 String
-  email                    String?        @unique
+  email                    String?         @unique
   occupation               String?
   emergencyContactName     String?
   emergencyContactMobileNo String?
   bloodType                String?
   patientRecord            PatientRecord?
-  doctor                   Doctor?        @relation(fields: [doctorId], references: [id])
+  doctor                   Doctor?         @relation(fields: [doctorId], references: [id])
   doctorId                 String?
   appointments             Appointment[]
-  Invoice                  Invoice[]
+  invoices                 Invoice[]
+  medicalRecords           MedicalRecord[]
 }
 
 model PatientRecord {
@@ -53,15 +54,16 @@ model PatientRecord {
 }
 
 model Appointment {
-  id          String   @id @default(uuid())
-  type        String
-  datetime    DateTime
-  scheduledAt DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  patient     Patient  @relation(fields: [patientId], references: [id])
-  doctor      Doctor   @relation(fields: [doctorId], references: [id])
-  patientId   String
-  doctorId    String
+  id            String         @id @default(uuid())
+  type          String
+  datetime      DateTime
+  scheduledAt   DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  patient       Patient        @relation(fields: [patientId], references: [id])
+  doctor        Doctor         @relation(fields: [doctorId], references: [id])
+  patientId     String
+  doctorId      String
+  MedicalRecord MedicalRecord?
 }
 
 model Staff {
@@ -134,7 +136,8 @@ model Medication {
   description        String?
   price              Float
   available          Int
-  Invoice_Medication Invoice_Medication[]
+  invoice_Medication Invoice_Medication[]
+  medicalRecord      MedicalRecord[]
 }
 
 model Invoice_Medication {
@@ -165,6 +168,37 @@ model Invoice {
   services           Service[]
   patientId          String
   Invoice_Medication Invoice_Medication[]
+}
+
+model MedicalRecord {
+  id                String       @id @default(uuid())
+  diagnosis         String
+  treatmentPlan     String
+  medicalProcedures String?
+  notes             String?
+  symptoms          Symptom[]
+  prescription      Medication[]
+  labResults        LabResult[]
+  appointment       Appointment  @relation(fields: [appointmentId], references: [id])
+  appointmentId     String       @unique
+  patient           Patient      @relation(fields: [patientId], references: [id])
+  patientId         String
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+}
+
+model Symptom {
+  id            String          @id @default(uuid())
+  name          String          @unique
+  description   String?
+  medicalRecord MedicalRecord[]
+}
+
+model LabResult {
+  id              String        @id @default(uuid())
+  //Add Lab result description
+  medicalRecord   MedicalRecord @relation(fields: [medicalRecordId], references: [id])
+  medicalRecordId String
 }
 
 enum Sex {
