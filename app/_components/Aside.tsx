@@ -13,15 +13,35 @@ import { usePathname } from "next/navigation";
 import { poppins } from "../fonts";
 import { useState } from "react";
 
-const Aside = () => {
+const Aside = ({ role }: { role: string }) => {
 	const path = usePathname();
-	const tabs = [
-		{ path: "/", title: "Home", icon: faHome },
-		{ path: "/appointments", title: "Appointments", icon: faClock },
-		{ path: "/profile", title: "Profile", icon: faPerson },
-		{ path: "/payment", title: "Payment", icon: faDollar },
-	];
 	const [open, setOpen] = useState(false);
+	const roles = ["patient", "doctor", "receptionist"];
+	// if (role !== "patient" && role !== "doctor" && role !== "receptionist") {
+	if (!roles.includes(role)) {
+		return <div>Unauthorized</div>;
+	}
+	const tabs = {
+		patient: [
+			{ path: "/dashboard", title: "Home", icon: faHome },
+			{ path: "/appointments", title: "Appointments", icon: faClock },
+			{ path: "/profile", title: "Profile", icon: faPerson },
+			{ path: "/payment", title: "Payment", icon: faDollar },
+		],
+		doctor: [
+			{ path: "/dashboard", title: "Home", icon: faHome },
+			{ path: "/appointments", title: "Appointments", icon: faClock },
+			{ path: "/profile", title: "Profile", icon: faPerson },
+			{ path: "/payment", title: "Payment", icon: faDollar },
+		],
+		receptionist: [
+			{ path: "/dashboard", title: "Home", icon: faHome },
+			{ path: "/appointments", title: "Appointments", icon: faClock },
+			{ path: "/profile", title: "Profile", icon: faPerson },
+			{ path: "/payment", title: "Payment", icon: faDollar },
+		],
+	};
+
 	return (
 		<>
 			<aside
@@ -35,7 +55,10 @@ const Aside = () => {
 					} items-center`}
 				>
 					{open && (
-						<Link href={"/"} className={"text-5xl font-bold"}>
+						<Link
+							href={"/dashboard"}
+							className={"text-5xl font-bold"}
+						>
 							EMR
 						</Link>
 					)}
@@ -45,7 +68,7 @@ const Aside = () => {
 						onClick={() => setOpen((prev) => !prev)}
 					/>
 				</div>
-				{tabs.map((val, ind) => {
+				{tabs[role].map((val, ind) => {
 					return (
 						<Link
 							key={ind}

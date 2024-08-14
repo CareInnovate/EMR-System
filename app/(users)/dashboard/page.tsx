@@ -1,13 +1,13 @@
-import PatientAppointments from "@/app/_pages/patient/appointments/page";
+import PatientDashboard from "@/app/_pages/patient/dashboard/page";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 
-export default async function Appointments() {
+export default async function Dashboard() {
 	const user = await getServerSession(options);
 
 	switch (user?.user.role) {
 		case "patient":
-			return <PatientAppointments />;
+			return <PatientDashboard />;
 		case "doctor":
 			return;
 		case "receptionist":
