@@ -37,7 +37,7 @@ export const options: NextAuthOptions = {
 
 				// If no error and we have user data, return it
 				if (user) {
-					return { ...user, role: "patient" };
+					return user;
 				}
 				// Return null if user data could not be retrieved
 				return null;
@@ -52,14 +52,14 @@ export const options: NextAuthOptions = {
 			if (account) {
 				token.name = user.firstName;
 				token.id = user.id;
-				token.role = "patient";
+				token.role = user.role.name;
 				token.email = user.email;
 			}
 			return token;
 		},
-		async session({ session, token, user }) {
+		async session({ session, token }) {
 			session.user.name = token.name as string;
-			session.user.role = "patient";
+			session.user.role = token.role;
 			session.user.id = token.id as string;
 			return session;
 		},

@@ -14,11 +14,23 @@ declare module "next-auth" {
 			id: string;
 		};
 	}
-	interface JWT extends DefaultJWT {
+
+	interface User {
+		id: string;
+		firstName: string;
+		middleName: string;
+		lastName: string;
+		email: string | null;
+		role: {
+			name: string;
+		};
+	}
+}
+declare module "next-auth/jwt" {
+	interface JWT {
 		name: string;
 		id: string;
 		role: string;
-		email: string;
+		email: string | null;
 	}
-	interface User extends Patient, DefaultUser {}
 }
