@@ -102,10 +102,10 @@ model Doctor {
 }
 
 model Role {
-  id          String        @id @default(uuid())
-  name        String        @unique
+  id          String       @id @default(uuid())
+  name        String       @unique
   staff       Staff[]
-  permissions Persmission[]
+  permissions Permission[]
 }
 
 model Department {
@@ -115,7 +115,7 @@ model Department {
   staff       Staff[]
 }
 
-model Persmission {
+model Permission {
   id          String  @id @default(uuid())
   name        String
   description String?

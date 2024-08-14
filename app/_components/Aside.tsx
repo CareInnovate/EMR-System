@@ -6,6 +6,7 @@ import {
 	faDollar,
 	faHome,
 	faPerson,
+	faRegistered,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -16,29 +17,33 @@ import { useState } from "react";
 const Aside = ({ role }: { role: string }) => {
 	const path = usePathname();
 	const [open, setOpen] = useState(false);
-	const roles = ["patient", "doctor", "receptionist"];
+	const roles = ["Patient", "Doctor", "Receptionist"];
 	// if (role !== "patient" && role !== "doctor" && role !== "receptionist") {
 	if (!roles.includes(role)) {
 		return <div>Unauthorized</div>;
 	}
 	const tabs = {
-		patient: [
+		Patient: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
 			{ path: "/appointments", title: "Appointments", icon: faClock },
 			{ path: "/profile", title: "Profile", icon: faPerson },
 			{ path: "/payment", title: "Payment", icon: faDollar },
 		],
-		doctor: [
+		Doctor: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
 			{ path: "/appointments", title: "Appointments", icon: faClock },
 			{ path: "/profile", title: "Profile", icon: faPerson },
 			{ path: "/payment", title: "Payment", icon: faDollar },
 		],
-		receptionist: [
+		Receptionist: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
 			{ path: "/appointments", title: "Appointments", icon: faClock },
 			{ path: "/profile", title: "Profile", icon: faPerson },
-			{ path: "/payment", title: "Payment", icon: faDollar },
+			{
+				path: "/register",
+				title: "Register Patient",
+				icon: faRegistered,
+			},
 		],
 	};
 
@@ -68,28 +73,31 @@ const Aside = ({ role }: { role: string }) => {
 						onClick={() => setOpen((prev) => !prev)}
 					/>
 				</div>
-				{tabs[role].map((val, ind) => {
-					return (
-						<Link
-							key={ind}
-							href={val.path}
-							className={` ${
-								poppins.className
-							} px-5 py-4 cursor-pointer rounded-lg gap-5 items-center   ${
-								val.path === path
-									? "bg-blue-950 text-white hover:bg-blue-900"
-									: "hover:bg-blue-100"
-							} ${
-								open
-									? "flex w-full sm:w-auto"
-									: "hidden sm:flex justify-center text-2xl"
-							}`}
-						>
-							<FontAwesomeIcon icon={val.icon} />
-							{open && val.title}
-						</Link>
-					);
-				})}
+				{
+					//@ts-ignore
+					tabs[role].map((val, ind) => {
+						return (
+							<Link
+								key={ind}
+								href={val.path}
+								className={` ${
+									poppins.className
+								} px-5 py-4 cursor-pointer rounded-lg gap-5 items-center   ${
+									val.path === path
+										? "bg-blue-950 text-white hover:bg-blue-900"
+										: "hover:bg-blue-100"
+								} ${
+									open
+										? "flex w-full sm:w-auto"
+										: "hidden sm:flex justify-center text-2xl"
+								}`}
+							>
+								<FontAwesomeIcon icon={val.icon} />
+								{open && val.title}
+							</Link>
+						);
+					})
+				}
 			</aside>
 			<div
 				className={`top-0 w-0 ${

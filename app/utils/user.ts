@@ -12,7 +12,7 @@ export default async function getUserByPhone(phone: string, password: string) {
 		},
 	});
 	if (patient) {
-		return { ...patient, role: { name: "patient" } };
+		return { ...patient, role: { name: "Patient" } };
 	}
 	const staff = await prisma.staff.findUnique({
 		where: { mobileNumber: phone, password: password },

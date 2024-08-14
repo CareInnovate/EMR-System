@@ -33,113 +33,141 @@ export async function POST(
 	req: NextRequest,
 	{ params }: { params: { id: string } }
 ) {
-	await prisma.patient.createMany({
+	await prisma.role.createMany({
 		data: [
 			{
-				id: "patient-1",
+				id: "role-doctor",
+				name: "Doctor",
+			},
+			{
+				id: "role-receptionist",
+				name: "Receptionist",
+			},
+			{
+				id: "role-administrator",
+				name: "Administrator",
+			},
+		],
+	});
+	await prisma.permission.createMany({
+		data: [
+			{
+				id: "perm-001",
+				name: "View Patient Records",
+				description: "Allows viewing of patient records",
+				roleId: "role-doctor",
+			},
+			{
+				id: "perm-002",
+				name: "Edit Patient Records",
+				description: "Allows editing of patient records",
+				roleId: "role-doctor",
+			},
+			{
+				id: "perm-003",
+				name: "Manage Appointments",
+				description: "Allows managing of patient appointments",
+				roleId: "role-receptionist",
+			},
+			{
+				id: "perm-004",
+				name: "Manage Staff",
+				description: "Allows managing of staff information",
+				roleId: "role-administrator",
+			},
+			{
+				id: "perm-005",
+				name: "Access Admin Dashboard",
+				description: "Allows access to the admin dashboard",
+				roleId: "role-administrator",
+			},
+		],
+	});
+	await prisma.staff.createMany({
+		data: [
+			{
+				username: "drjohnsmith",
+				password: "securepassword123",
 				firstName: "John",
-				middleName: "A.",
-				lastName: "Doe",
+				middleName: "Michael",
+				lastName: "Smith",
 				sex: "MALE",
-				birthDate: new Date("1990-01-01"),
+				birthDate: new Date("1980-06-15"),
 				region: "Addis Ababa",
 				city: "Addis Ababa",
-				woreda: "01",
-				kebele: 123,
-				mobileNumber: "0911000000",
-				password: "hashed_password",
-				email: "john.doe@example.com",
+				woreda: "04",
+				kebele: 12,
+				mobileNumber: "0912345678",
+				email: "john.smith@example.com",
+				roleId: "role-doctor",
+				specialization: "Cardiology",
+				hireDate: new Date("2015-03-25"),
+				emergencyContact: "0911234567",
+				employmentStatus: "Active",
+				notes: ["Highly experienced in cardiac surgeries"],
 			},
 			{
-				id: "patient-2",
-				firstName: "Jane",
-				middleName: "B.",
-				lastName: "Smith",
+				id: "staff-002",
+				username: "reception001",
+				password: "securepassword456",
+				firstName: "Martha",
+				middleName: "Jane",
+				lastName: "Doe",
 				sex: "FEMALE",
-				birthDate: new Date("1985-05-15"),
+				birthDate: new Date("1992-08-20"),
 				region: "Oromia",
 				city: "Adama",
+				woreda: "03",
+				kebele: 15,
+				mobileNumber: "0912345679",
+				email: "martha.doe@example.com",
+				roleId: "role-receptionist",
+				hireDate: new Date("2018-06-01"),
+				emergencyContact: "0911234568",
+				employmentStatus: "Active",
+				notes: ["Excellent communication skills"],
+			},
+			{
+				id: "staff-003",
+				username: "admin001",
+				password: "securepassword789",
+				firstName: "David",
+				middleName: "Andrew",
+				lastName: "Johnson",
+				sex: "MALE",
+				birthDate: new Date("1975-12-05"),
+				region: "Amhara",
+				city: "Bahir Dar",
 				woreda: "02",
-				kebele: 456,
-				mobileNumber: "0912000000",
-				password: "hashed_password",
-				email: "jane.smith@example.com",
+				kebele: 8,
+				mobileNumber: "0912345680",
+				email: "david.johnson@example.com",
+				roleId: "role-administrator",
+				hireDate: new Date("2012-01-15"),
+				emergencyContact: "0911234569",
+				employmentStatus: "Active",
+				notes: ["Experienced in hospital administration"],
 			},
 		],
 	});
-	await prisma.medication.createMany({
-		data: [
-			{
-				id: "med-1",
-				name: "Aspirin",
-				description: "Pain reliever and anti-inflammatory",
-				price: 5.0,
-				available: 100,
-			},
-			{
-				id: "med-2",
-				name: "Amoxicillin",
-				description: "Antibiotic",
-				price: 10.0,
-				available: 50,
-			},
-			{
-				id: "med-3",
-				name: "Lisinopril",
-				description: "Blood pressure medication",
-				price: 7.0,
-				available: 75,
-			},
-		],
-	});
-	await prisma.service.createMany({
-		data: [
-			{
-				id: "service-1",
-				name: "Consultation",
-				description: "Service provided by doctor to patient",
-				price: 200,
-			},
-			{
-				id: "service-2",
-				name: "Blood Test",
-				description: "Comprehensive blood test",
-				price: 30.0,
-			},
-			{
-				id: "service-3",
-				name: "X-Ray",
-				description: "Chest X-ray",
-				price: 75.0,
-			},
-		],
-	});
-	await prisma.invoice.create({
+	await prisma.doctor.create({
 		data: {
-			id: "invoice-1",
-			status: "Unpaid",
-			patientId: "patient-1",
-			services: {
-				connect: [{ id: "service-1" }, { id: "service-2" }],
+			staff: { connect: { username: "drjohnsmith" } },
+			patients: {
+				connect: [{ id: "patient-1" }, { id: "patient-2" }],
 			},
-			Invoice_Medication: {
-				create: [{ quantity: 2, medicationId: "med-1" }],
+			appointments: {
+				create: [
+					{
+						datetime: new Date("2024-11-05"),
+						patientId: "patient-1",
+						type: "Check up",
+					},
+				],
 			},
 		},
 	});
-	await prisma.invoice.create({
-		data: {
-			id: "invoice-2",
-			status: "Paid",
-			patientId: "patient-2",
-			services: {
-				connect: [{ id: "service-3" }],
-			},
-			Invoice_Medication: {
-				create: [{ quantity: 1, medicationId: "med-3" }],
-			},
-		},
-	});
+
 	return NextResponse.json("Successful");
 }
 

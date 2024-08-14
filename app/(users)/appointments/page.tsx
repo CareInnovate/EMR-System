@@ -6,11 +6,11 @@ export default async function Appointments() {
 	const user = await getServerSession(options);
 
 	switch (user?.user.role) {
-		case "patient":
+		case "Patient":
 			return <PatientAppointments />;
-		case "doctor":
+		case "Doctor":
 			return;
-		case "receptionist":
+		case "Receptionist":
 			return;
 		default:
 			return <div>You are Unauthorized to view this page </div>;

@@ -6,11 +6,11 @@ export default async function Dashboard() {
 	const user = await getServerSession(options);
 
 	switch (user?.user.role) {
-		case "patient":
+		case "Patient":
 			return <PatientDashboard />;
-		case "doctor":
+		case "Doctor":
 			return;
-		case "receptionist":
+		case "Receptionist":
 			return;
 		default:
 			return <div>You are Unauthorized to view this page </div>;
