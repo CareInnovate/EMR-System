@@ -10,7 +10,7 @@ type props = {
 const InputBox = ({ type, placeholder, label, name, required }: props) => {
 	return (
 		<label className="flex flex-col gap-2 w-full">
-			<span className=" p-2 w-full font-bold">{label}:</span>
+			<span className=" p-2 w-full ">{label}:</span>
 			<input
 				className="ml-2 p-2 w-4/5 border border-gray-300 rounded-md"
 				type={type || "text"}

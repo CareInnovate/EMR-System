@@ -30,7 +30,6 @@ model Patient {
   occupation               String?
   emergencyContactName     String?
   emergencyContactMobileNo String?
-  bloodType                String?
   patientRecord            PatientRecord?
   doctor                   Doctor?         @relation(fields: [doctorId], references: [id])
   doctorId                 String?
@@ -49,6 +48,7 @@ model PatientRecord {
   weight           Float?
   bloodPressure    Float?
   temperature      Float?
+  bloodType        String?
   patient          Patient  @relation(fields: [patientId], references: [id])
   patientId        String   @unique
 }
