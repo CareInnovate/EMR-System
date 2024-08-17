@@ -1,36 +1,37 @@
 "use client";
 import moment from "moment";
-import { ReactNode, useCallback, useRef, useState } from "react";
+import { useState } from "react";
 import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
-import withDragandDrop, {
-	EventInteractionArgs,
-} from "react-big-calendar/lib/addons/dragAndDrop";
+import withDragandDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import Popup from "./Popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { useConfirm } from "../_hooks/useConfirm";
+import { useCalendar } from "../_hooks/useCalendar";
 
 const DnDCalendar = withDragandDrop<event>(BigCalendar);
-type event = {
+export type event = {
 	start: Date;
 	end: Date;
 	title: string;
 	resourceId?: number;
 	data: { id: number };
 };
-const resources = [
-	{ id: 1, title: "Dr. John Smith" },
-	{ id: 2, title: "Dr. Anna Frank" },
-	{ id: 3, title: "Dr. Tom Cat" },
-];
+export type resource = {
+	id: number;
+	title: string;
+};
 
 //TODO: add Props to enter the doctors that the receptionist
 //handles(based on department) and the events of the week(patients)
 const Calendar = () => {
 	const localizer = momentLocalizer(moment);
-	const message = useRef<ReactNode>();
-	const currentEvent = useRef<event>();
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
+	const resources = [
+		{ id: 1, title: "Dr. John Smith" },
+		{ id: 2, title: "Dr. Anna Frank" },
+		{ id: 3, title: "Dr. Tom Cat" },
+	];
 	const [events, setEvents] = useState<event[]>([
 		//temporary demo data
 		{
@@ -52,68 +53,12 @@ const Calendar = () => {
 			resourceId: 2,
 		},
 	]);
-	const handleDrop = useCallback(
-		async ({
-			event,
-			start,
-			end,
-			resourceId,
-		}: EventInteractionArgs<event>) => {
-			let doctorChange = <span></span>;
-			if (
-				currentEvent.current?.resourceId &&
-				typeof resourceId === "number" &&
-				currentEvent.current?.resourceId !== resourceId
-			) {
-				const doctors = resources.reduce<{ prev: string; cur: string }>(
-					(acc, cur) => {
-						if (cur.id === resourceId) {
-							acc.cur = cur.title;
-							return acc;
-						} else if (
-							cur.id === currentEvent.current?.resourceId
-						) {
-							acc.prev = cur.title;
-							return acc;
-						}
-						return acc;
-					},
-					{ prev: "", cur: "" }
-				);
-				doctorChange = (
-					<span>
-						and from {doctors.prev} to {doctors.cur}
-					</span>
-				);
-			}
-			message.current = (
-				<p>
-					Are you sure you want to change the schedule from{" "}
-					<strong>
-						{currentEvent.current?.start.toLocaleString()}{" "}
-					</strong>
-					to <strong> {start.toLocaleString()}</strong> {doctorChange}
-					?
-				</p>
-			);
-			const ans = await confirm();
-			if (ans) {
-				setEvents((prevEvents) =>
-					prevEvents.map((prevEvent) =>
-						prevEvent.data.id === event?.data?.id
-							? {
-									...prevEvent,
-									start: start as Date,
-									end: end as Date,
-									resourceId: resourceId as number,
-							  }
-							: prevEvent
-					)
-				);
-			}
-		},
-		[setEvents, confirm]
+	const { message, currentEvent, handleDrop } = useCalendar(
+		setEvents,
+		resources,
+		confirm
 	);
+
 	return (
 		<div className="h-full w-4/5 flex justify-center">
 			<Popup isOpen={open}>
