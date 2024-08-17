@@ -2,6 +2,11 @@
 import { registerPatient } from "@/app/_actions/register";
 import InputBox from "@/app/_components/InputBox";
 import Popup from "@/app/_components/Popup";
+import {
+	faCheckCircle,
+	faXmarkCircle,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useRef, useState } from "react";
 import { useFormState } from "react-dom";
 const initialState = {
@@ -24,13 +29,32 @@ export function ReceptionistRegister() {
 	return (
 		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
 			{state?.message && !pending && (
-				<Popup
-					message={state.message}
-					error={state.error}
-					password={state.password}
-					isOpen={open}
-					onClose={() => setOpen(false)}
-				/>
+				<Popup isOpen={open}>
+					<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-around gap-5 text-center">
+						<FontAwesomeIcon
+							icon={state.error ? faXmarkCircle : faCheckCircle}
+							className={`text-7xl ${
+								state.error ? "text-red-600" : "text-green-500"
+							}`}
+						/>
+						<p className="text-gray-600 text-xl">{state.message}</p>
+
+						{state.password && (
+							<p>
+								The patient`&apos;`s temporary password is
+								<strong>{state.password}</strong>
+							</p>
+						)}
+						<button
+							className={`py-2 px-5 rounded-md text-xl ${
+								state.error ? "bg-red-200" : "bg-green-200"
+							}`}
+							onClick={() => setOpen(false)}
+						>
+							{state.error ? "Try Again" : "Continue"}
+						</button>
+					</div>
+				</Popup>
 			)}
 			<form
 				className="grid grid-cols-1 lg:grid-cols-2 w-full sm:w-3/4  gap-2 text-sm sm:text-lg break-words border-gray-200 rounded-md border-2 p-9"
