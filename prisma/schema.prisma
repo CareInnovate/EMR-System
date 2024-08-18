@@ -23,7 +23,7 @@ model Patient {
   region                   String
   city                     String
   woreda                   String
-  kebele                   Int?
+  kebele                   String?
   mobileNumber             String          @unique
   password                 String
   email                    String?         @unique

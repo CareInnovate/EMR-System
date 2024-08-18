@@ -1,33 +1,58 @@
 "use server";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import prisma from "../client";
+import { z } from "zod";
+import { Sex } from "@prisma/client";
 
+const registerPatientSchema = z.object({
+	firstName: z.string().min(3, { message: "First name is required" }),
+	middleName: z.string().min(3, { message: "Middle name is required" }),
+	lastName: z.string().min(3, { message: "Last name is required" }),
+	mobileNumber: z
+		.string({ message: "Phone number is required" })
+		.min(10, { message: "Phone number must be at least 10 digits" }),
+	email: z.string().email({ message: "Invalid email address" }),
+	emergencyContactName: z
+		.string()
+		.min(3, { message: "Emergency Contact name is required" }),
+	emergencyContactMobileNo: z
+		.string({ message: "Emergency contact's phone number is required" })
+		.min(10, {
+			message:
+				"Emergency contact's phone number must be at least 10 digits",
+		}),
+});
 export async function registerPatient(initialState: any, formData: FormData) {
 	const birthDate = new Date(formData.get("birthDate") as string);
-	const kebele = parseInt(formData.get("kebele") as string);
+	const data = {
+		birthDate: birthDate,
+		city: formData.get("city") as string,
+		firstName: formData.get("firstName") as string,
+		middleName: formData.get("middleName") as string,
+		lastName: formData.get("lastName") as string,
+		sex: formData.get("sex") as Sex,
+		mobileNumber: formData.get("mobileNo") as string,
+		email: formData.get("email") as string,
+		region: formData.get("region") as string,
+		woreda: formData.get("woreda") as string,
+		kebele: formData.get("kebele") as string,
+		occupation: formData.get("occupation") as string,
+		emergencyContactName: formData.get("emergencyContactName") as string,
+		emergencyContactMobileNo: formData.get(
+			"emergencyContactPhone"
+		) as string,
+		password: "",
+	};
+	const parsed = registerPatientSchema.safeParse(data);
+	if (!parsed.success) {
+		return {
+			message: parsed.error.errors[0].message,
+			error: true,
+		};
+	}
 	try {
 		const patient = await prisma.patient.create({
-			data: {
-				birthDate: birthDate,
-				city: formData.get("city") as string,
-				firstName: formData.get("firstName") as string,
-				middleName: formData.get("middleName") as string,
-				lastName: formData.get("lastName") as string,
-				//@ts-ignore
-				sex: formData.get("sex"),
-				mobileNumber: formData.get("mobileNo") as string,
-				email: formData.get("email") as string,
-				region: formData.get("region") as string,
-				woreda: formData.get("woreda") as string,
-				kebele: kebele,
-				occupation: formData.get("occupation") as string,
-				emergencyContactName: formData.get(
-					"emergencyContactName"
-				) as string,
-				emergencyContactMobileNo: formData.get(
-					"emergencyContactPhone"
-				) as string,
-				password: "",
-			},
+			data: data,
 		});
 		if (patient) {
 			return {
@@ -37,7 +62,25 @@ export async function registerPatient(initialState: any, formData: FormData) {
 			};
 		}
 	} catch (e) {
-		//TODO: handle different errors
+		if (e instanceof PrismaClientKnownRequestError) {
+			if (e.code === "P2002") {
+				const target = e.meta?.target;
+				if (typeof target === "string" && target.includes("email")) {
+					return {
+						message: "A user already exists with this email",
+						error: true,
+					};
+				} else if (
+					typeof target === "string" &&
+					target.includes("mobileNumber")
+				) {
+					return {
+						message: "A user already exists with this phone number",
+						error: true,
+					};
+				}
+			}
+		}
 		console.log(e);
 		return {
 			message: "There was an error when registering the patient",
