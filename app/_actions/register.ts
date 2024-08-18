@@ -35,7 +35,7 @@ export async function registerPatient(initialState: any, formData: FormData) {
 		email: formData.get("email") as string,
 		region: formData.get("region") as string,
 		woreda: formData.get("woreda") as string,
-		kebele: formData.get("kebele") as string,
+		kebele: formData.get("kebele")?.toString() as string,
 		occupation: formData.get("occupation") as string,
 		emergencyContactName: formData.get("emergencyContactName") as string,
 		emergencyContactMobileNo: formData.get(

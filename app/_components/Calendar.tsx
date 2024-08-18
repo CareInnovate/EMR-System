@@ -24,6 +24,9 @@ export type resource = {
 
 //TODO: add Props to enter the doctors that the receptionist
 //handles(based on department) and the events of the week(patients)
+
+//TODO: add a way to create and edit appointments by double clicking
+//on empty slots and submitting forms
 const Calendar = () => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
