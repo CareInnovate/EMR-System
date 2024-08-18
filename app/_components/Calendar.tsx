@@ -35,8 +35,8 @@ const Calendar = () => {
 	const [events, setEvents] = useState<event[]>([
 		//temporary demo data
 		{
-			start: moment("2024-08-16T11:00").toDate(),
-			end: moment("2024-08-16T15:00").toDate(),
+			start: moment("2024-08-18T11:00").toDate(),
+			end: moment("2024-08-18T11:30").toDate(),
 			title: "Hello there",
 			data: {
 				id: 1,
@@ -44,8 +44,8 @@ const Calendar = () => {
 			resourceId: 1,
 		},
 		{
-			start: moment("2024-08-16T11:00").toDate(),
-			end: moment("2024-08-16T15:00").toDate(),
+			start: moment("2024-08-18T11:00").toDate(),
+			end: moment("2024-08-18T12:00").toDate(),
 			title: "Hello World",
 			data: {
 				id: 2,
@@ -60,7 +60,7 @@ const Calendar = () => {
 	);
 
 	return (
-		<div className="h-full w-4/5 flex justify-center">
+		<div className="h-full w-5/6 flex justify-center">
 			<Popup isOpen={open}>
 				<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-around gap-5 text-center">
 					<FontAwesomeIcon
@@ -93,10 +93,13 @@ const Calendar = () => {
 				views={["day", "week", "agenda"]}
 				defaultView="day"
 				onEventDrop={handleDrop}
+				onEventResize={handleDrop}
 				onDragStart={({ event }) => {
 					currentEvent.current = event;
 				}}
 				style={{ width: "100%" }}
+				min={moment("2024-02-04T08:00:00").toDate()}
+				max={moment("2024-02-04T18:00:00").toDate()}
 			/>
 		</div>
 	);

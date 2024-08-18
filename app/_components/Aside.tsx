@@ -1,12 +1,12 @@
 "use client";
 import {
+	faAddressCard,
 	faBars,
 	faClock,
 	faClose,
 	faDollar,
 	faHome,
 	faPerson,
-	faRegistered,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -38,11 +38,11 @@ const Aside = ({ role }: { role: string }) => {
 		Receptionist: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
 			{ path: "/appointments", title: "Appointments", icon: faClock },
-			{ path: "/profile", title: "Profile", icon: faPerson },
+			// { path: "/profile", title: "Profile", icon: faPerson },
 			{
 				path: "/register",
 				title: "Register Patient",
-				icon: faRegistered,
+				icon: faAddressCard,
 			},
 		],
 	};

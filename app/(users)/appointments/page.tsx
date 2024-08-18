@@ -1,4 +1,5 @@
 import PatientAppointments from "@/app/_pages/patient/appointments/page";
+import { ReceptionistAppointments } from "@/app/_pages/receptionist/appointments/page";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 
@@ -11,7 +12,7 @@ export default async function Appointments() {
 		case "Doctor":
 			return;
 		case "Receptionist":
-			return;
+			return <ReceptionistAppointments />;
 		default:
 			return <div>You are Unauthorized to view this page </div>;
 	}

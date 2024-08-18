@@ -19,7 +19,61 @@ aside {
 .sign-in-form {
 	box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
-
+.rbc-allday-cell {
+	@apply hidden  !important;
+}
+.rbc-row.rbc-time-header-cell {
+	@apply flex-1 justify-center !important;
+}
+.rbc-row.rbc-row-resource {
+	@apply border-none flex-1 items-center !important;
+}
+.rbc-header,
+.rbc-time-slot {
+	@apply border-none !important;
+}
+.rbc-time-slot {
+	@apply flex flex-1 items-center;
+}
+.rbc-time-header-content {
+	@apply items-center justify-between gap-2 text-xl text-gray-700 !important;
+}
+.rbc-time-view.rbc-time-view-resources {
+	@apply rounded-xl shadow-md p-2 !important;
+}
+.rbc-time-header.rbc-overflowing {
+	@apply h-20 !important;
+}
+.rbc-event {
+	@apply border-b-0 border-r-0 border-l-0 border-t-4 border-orange-400 bg-orange-100 text-black px-3 py-0 !important;
+}
+.rbc-timeslot-group {
+	@apply min-h-28 !important;
+}
+.rbc-event-label {
+	@apply text-sm flex text-gray-600 text-right items-center flex-wrap text-wrap justify-end !important;
+}
+.rbc-event-content {
+	@apply flex items-center text-lg text-wrap m-0 !important;
+}
+.rbc-current-time-indicator {
+	@apply h-0.5 bg-teal-600 !important;
+}
+.rbc-day-slot.rbc-time-column.rbc-now.rbc-today {
+	@apply bg-blue-50 !important;
+}
+.rbc-addons-dnd-resizable {
+	@apply h-full w-full flex flex-col justify-between overflow-y-scroll !important;
+}
+.rbc-header.rbc-today {
+	@apply text-blue-600 !important;
+}
+.rbc-toolbar-label {
+	@apply text-lg text-blue-600 !important;
+}
+.rbc-toolbar {
+	@apply mb-5 p-1  !important;
+}
 @media only screen and (max-width: 640px) {
 	aside {
 		box-shadow: none;
