@@ -6,6 +6,7 @@ export async function GET(req: NextRequest) {
 	const middleName = req.nextUrl.searchParams.get("middlename");
 	const lastName = req.nextUrl.searchParams.get("lastname");
 	const mobileNo = req.nextUrl.searchParams.get("mobileNo");
+	const email = req.nextUrl.searchParams.get("email");
 	const patients = await prisma.patient.findMany({
 		where: {
 			firstName: {
@@ -24,6 +25,17 @@ export async function GET(req: NextRequest) {
 				contains: mobileNo || "",
 				mode: "insensitive",
 			},
+			email: {
+				contains: email || "",
+				mode: "insensitive",
+			},
+		},
+		select: {
+			firstName: true,
+			middleName: true,
+			lastName: true,
+			birthDate: true,
+			sex: true,
 		},
 	});
 	return NextResponse.json(patients);
