@@ -4,9 +4,11 @@ import {
 	faBars,
 	faClock,
 	faClose,
+	faCross,
 	faDollar,
 	faHome,
 	faPerson,
+	faPlusSquare,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
@@ -31,7 +33,7 @@ const Aside = ({ role }: { role: string }) => {
 		],
 		Doctor: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
-			{ path: "/appointments", title: "Appointments", icon: faClock },
+			{ path: "/patients", title: "Patients", icon: faPlusSquare },
 			{ path: "/profile", title: "Profile", icon: faPerson },
 			{ path: "/payment", title: "Payment", icon: faDollar },
 		],

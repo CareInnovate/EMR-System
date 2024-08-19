@@ -23,12 +23,10 @@ export default function DoctorSearch() {
 			email: form.current?.email?.value || "",
 		};
 		const searchParams = new URLSearchParams(input);
-		console.log(searchParams.toString());
 		const res = await fetch(
 			`http://localhost:3000/api/patients?${searchParams.toString()}`
 		);
 		const data = await res.json();
-		console.log(data);
 		setPatients(data);
 	}
 
@@ -103,7 +101,7 @@ export default function DoctorSearch() {
 					</div>
 					{patients.map((patient, ind) => {
 						return (
-							<Link key={ind} href={`/patient/${patient.id}`}>
+							<Link key={ind} href={`/patients/${patient.id}`}>
 								<div className="flex p-3 bg-gray-100 rounded-md">
 									<p className="w-24">{ind + 1}</p>
 									<p className="w-full">{`${patient.firstName} ${patient.middleName} ${patient.lastName}`}</p>

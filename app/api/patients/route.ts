@@ -36,6 +36,7 @@ export async function GET(req: NextRequest) {
 			lastName: true,
 			birthDate: true,
 			sex: true,
+			id: true,
 		},
 	});
 	return NextResponse.json(patients);
