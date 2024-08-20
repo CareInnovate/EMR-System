@@ -2,15 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-table {
-	padding: 30px;
-}
 th {
-	background-color: rgb(255, 244, 233);
+	@apply bg-blue-700 text-white;
 }
 th,
 td {
 	padding: 15px;
+}
+tfoot {
+	@apply bg-blue-50 border-t border-blue-400;
 }
 
 aside {
@@ -73,6 +73,9 @@ aside {
 }
 .rbc-toolbar {
 	@apply mb-5 p-1  !important;
+}
+.rbc-active {
+	@apply bg-blue-700 text-white !important;
 }
 @media only screen and (max-width: 640px) {
 	aside {

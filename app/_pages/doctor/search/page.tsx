@@ -33,7 +33,7 @@ export default function DoctorSearch() {
 	return (
 		<main className="flex flex-col p-6 w-3/4 mx-auto mt-24 gap-6 h-5/6">
 			<form
-				className="bg-white p-6 rounded-md text-xl border border-gray-400 flex flex-col gap-4"
+				className="bg-white p-6 rounded-md text-xl border border-gray-400 flex flex-col gap-4 w-full"
 				onSubmit={handleSubmit}
 				ref={form}
 			>
@@ -102,7 +102,7 @@ export default function DoctorSearch() {
 					{patients.map((patient, ind) => {
 						return (
 							<Link key={ind} href={`/patients/${patient.id}`}>
-								<div className="flex p-3 bg-gray-100 rounded-md">
+								<div className="flex p-3 bg-blue-100 rounded-md">
 									<p className="w-24">{ind + 1}</p>
 									<p className="w-full">{`${patient.firstName} ${patient.middleName} ${patient.lastName}`}</p>
 									<p className="w-1/3 text-center">

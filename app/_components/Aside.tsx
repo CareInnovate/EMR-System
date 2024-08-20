@@ -34,8 +34,8 @@ const Aside = ({ role }: { role: string }) => {
 		Doctor: [
 			{ path: "/dashboard", title: "Home", icon: faHome },
 			{ path: "/patients", title: "Patients", icon: faPlusSquare },
-			{ path: "/profile", title: "Profile", icon: faPerson },
-			{ path: "/payment", title: "Payment", icon: faDollar },
+			// { path: "/profile", title: "Profile", icon: faPerson },
+			// { path: "/payment", title: "Payment", icon: faDollar },
 		],
 		Receptionist: [
 			{ path: "/dashboard", title: "Home", icon: faHome },

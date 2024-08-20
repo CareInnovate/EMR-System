@@ -1,3 +1,4 @@
+import DoctorDashboard from "@/app/_pages/doctor/dashboard/page";
 import PatientDashboard from "@/app/_pages/patient/dashboard/page";
 import { ReceptionistDashboard } from "@/app/_pages/receptionist/dashboard/page";
 import { options } from "@/app/api/auth/[...nextauth]/options";
@@ -10,7 +11,7 @@ export default async function Dashboard() {
 		case "Patient":
 			return <PatientDashboard />;
 		case "Doctor":
-			return;
+			return <DoctorDashboard />;
 		case "Receptionist":
 			return <ReceptionistDashboard />;
 		default:

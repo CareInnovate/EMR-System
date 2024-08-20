@@ -3,7 +3,7 @@ import PaidInvoices from "@/app/_components/PaidInvoices";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { invoices } from "@/app/api/patient/[id]/invoices/route";
 import { getServerSession } from "next-auth";
-import { ReactElement } from "react";
+import { Fragment, ReactElement } from "react";
 
 export default async function PatientPayment() {
 	const user = await getServerSession(options);
@@ -32,11 +32,11 @@ function separateInvoices(invoices: invoices[]) {
 	let serviceTotal = 0;
 	const services = invoices.map((invoice, i): ReactElement | undefined => {
 		return (
-			<>
+			<Fragment key={invoice.id}>
 				{invoice.services.map((service, ind) => {
 					serviceTotal += service.price;
 					return (
-						<tr key={ind}>
+						<tr key={service.id}>
 							<td className="w-3/5 px-1 sm:px-3">
 								{service.name}
 							</td>
@@ -49,17 +49,17 @@ function separateInvoices(invoices: invoices[]) {
 						</tr>
 					);
 				})}
-			</>
+			</Fragment>
 		);
 	});
 	let medicationTotal = 0;
 	const medications = invoices.map((invoice, i): ReactElement | undefined => {
 		return (
-			<>
+			<Fragment key={invoice.id}>
 				{invoice.Invoice_Medication.map((inv, ind) => {
 					medicationTotal += inv.quantity * inv.medication.price;
 					return (
-						<tr key={ind}>
+						<tr key={inv.id}>
 							<td className="w-3/5 px-1 sm:px-3 ">
 								{inv.medication.name}
 							</td>
@@ -75,7 +75,7 @@ function separateInvoices(invoices: invoices[]) {
 						</tr>
 					);
 				})}
-			</>
+			</Fragment>
 		);
 	});
 	return { medications, services, medicationTotal, serviceTotal };

@@ -7,7 +7,7 @@ export default function PatientAppointments() {
 			<h1 className="text-2xl sm:text-4xl mb-5 w-full sm:w-3/4 text-left">
 				My Appointments
 			</h1>
-			<table className="w-full sm:w-3/4 text-sm sm:text-lg bg-red-100">
+			<table className="w-full sm:w-3/4 text-sm sm:text-lg border border-blue-700">
 				<thead>
 					<tr className="text-xl p-14">
 						<th>Doctor</th>
@@ -77,7 +77,7 @@ export default function PatientAppointments() {
 				</tbody>
 			</table>
 			<div className="mt-8 w-3/4 flex justify-end mr-2">
-				<button className="bg-red-300 px-3 py-2 rounded">
+				<button className="bg-blue-900 text-white px-3 py-2 rounded">
 					Schedule Appointment
 				</button>
 			</div>

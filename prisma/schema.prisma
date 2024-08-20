@@ -46,7 +46,7 @@ model PatientRecord {
   familyHistory    String?
   height           Float?
   weight           Float?
-  bloodPressure    Float?
+  bloodPressure    String?
   temperature      Float?
   bloodType        String?
   patient          Patient  @relation(fields: [patientId], references: [id])

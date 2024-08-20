@@ -28,7 +28,7 @@ const PaidInvoices = ({ paidInvoices }: { paidInvoices: invoices[] }) => {
 				}
 				return (
 					<div
-						key={ind}
+						key={invoice.id}
 						className="py-5 px-1 sm:px-8 md:px-10 lg:px-20 w-full flex justify-between text-xl items-center"
 					>
 						<div className="flex gap-6 items-center">
