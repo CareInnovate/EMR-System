@@ -19,7 +19,7 @@ export default async function DoctorTreatmentPage({
 			<PatientDetails patient={patient} />
 			<PatientConsultation />
 
-			<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4 ">
+			<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4">
 				<h1 className="text-lg sm:text-2xl font-bold">
 					Past Medical Records
 				</h1>
