@@ -201,6 +201,11 @@ model LabResult {
   medicalRecordId String
 }
 
+model Diseases {
+  id   String @id @default(uuid())
+  name String @unique
+}
+
 enum Sex {
   MALE
   FEMALE

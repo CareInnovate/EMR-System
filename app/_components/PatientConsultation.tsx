@@ -1,11 +1,12 @@
 "use client";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import InputBox from "./InputBox";
-type examinationData = {
+import SearchBox from "./SearchBox";
+export type examinationData = {
 	vitals?: {
 		temperature?: number;
 		bloodPressure?: string;
@@ -15,7 +16,7 @@ type examinationData = {
 	heent?: string;
 	lgs?: string;
 };
-type consultationData = {
+export type consultationData = {
 	symptoms: Set<string>;
 	examination: examinationData;
 	diagnosis: string[];
@@ -29,7 +30,6 @@ const PatientConsultation = () => {
 		diagnosis: [],
 		prescription: [],
 	});
-	console.log(data);
 
 	const commonSymptoms = [
 		"Fever",
@@ -61,6 +61,30 @@ const PatientConsultation = () => {
 							return {
 								...prev,
 								symptoms: newSet,
+							};
+						});
+					}}
+					className="cursor-pointer text-gray-600 mt-0.5"
+				/>
+			</div>
+		);
+	});
+	const patientDiagnosis = data.diagnosis.map((diagnosis, ind) => {
+		return (
+			<div
+				className="rounded-3xl px-5 py-2 bg-gray-200 flex items-center gap-3"
+				key={ind}
+			>
+				<p>{diagnosis}</p>
+				<FontAwesomeIcon
+					icon={faClose}
+					onClick={() => {
+						setData((prev) => {
+							return {
+								...prev,
+								diagnosis: prev.diagnosis.filter(
+									(diag, i) => i !== ind
+								),
 							};
 						});
 					}}
@@ -112,7 +136,8 @@ const PatientConsultation = () => {
 						<TabList className={"border-b border-blue-700"}>
 							<Tab>Symptoms</Tab>
 							<Tab>Examination</Tab>
-							<Tab>Diagnose & Prescribe</Tab>
+							<Tab>Diagnosis</Tab>
+							<Tab>Prescription</Tab>
 							<Tab>Review</Tab>
 						</TabList>
 						<TabPanel>
@@ -289,9 +314,36 @@ const PatientConsultation = () => {
 							</form>
 						</TabPanel>
 						<TabPanel>
+							<div className="py-3 px-2 h-48 flex flex-col gap-4 ">
+								<div className="p-2 min-h-18 flex flex-col gap-2">
+									<p className="py-2">
+										Patient&apos;s Diagnosis
+									</p>
+									<div className="flex gap-2">
+										{data.diagnosis.length > 0 ? (
+											patientDiagnosis
+										) : (
+											<p className="text-gray-400">
+												No symptoms selected
+											</p>
+										)}
+									</div>
+								</div>
+								<div className="p-2 min-h-18 flex flex-col gap-2 mt-2">
+									<SearchBox
+										label="Diagnosis"
+										name="diagnosis"
+										fetchUrl="diseases"
+										setData={setData}
+										placeholder="Search for diagnosis ..."
+									/>
+								</div>
+							</div>
+						</TabPanel>
+						<TabPanel>
 							<div className="py-3 px-2 h-48">
-								Go here to diagnose the disease
-								<input type="text" name="diagnose" />
+								Prescriptions
+								<input type="text" name="review" />
 							</div>
 						</TabPanel>
 						<TabPanel>

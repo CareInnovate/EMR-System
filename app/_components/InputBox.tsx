@@ -7,6 +7,7 @@ type props = {
 	name: string;
 	required?: boolean;
 	value?: any;
+	onChange?: ChangeEventHandler<HTMLInputElement>;
 };
 const InputBox = ({
 	type,
@@ -15,6 +16,7 @@ const InputBox = ({
 	name,
 	required,
 	value,
+	onChange,
 }: props) => {
 	return (
 		<label className="flex flex-col gap-2 w-full">
@@ -27,6 +29,7 @@ const InputBox = ({
 				placeholder={placeholder}
 				required={required || false}
 				value={value}
+				onChange={onChange}
 			/>
 		</label>
 	);
