@@ -1,4 +1,3 @@
-import PatientConsultation from "@/app/_components/PatientConsultation";
 import PatientDetails from "@/app/_components/PatientDetails";
 import { patient } from "@/app/api/patient/[id]/route";
 import Link from "next/link";
@@ -16,8 +15,15 @@ export default async function DoctorTreatmentPage({
 	const patient: patient = await res.json();
 	return (
 		<main className="w-3/4 mt-24 flex flex-col mx-auto gap-5 h-3/4 sm:text-lg text-sm">
+			<div className="w-full flex justify-end">
+				<Link
+					href={`${params.id}/consult`}
+					className="px-5 py-2 bg-blue-900 text-white hover:bg-blue-700 hover:text-white rounded-md"
+				>
+					Start Consultation
+				</Link>
+			</div>
 			<PatientDetails patient={patient} />
-			<PatientConsultation />
 
 			<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4 ">
 				<h1 className="text-lg sm:text-2xl font-bold">

@@ -1,4 +1,5 @@
 import { ReceptionistRegister } from "@/app/_pages/receptionist/register/page";
+import Unauthorized from "@/app/_pages/Unauthorized";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 
@@ -11,6 +12,6 @@ export default async function Register() {
 		case "Receptionist":
 			return <ReceptionistRegister />;
 		default:
-			return <div>You are Unauthorized to view this page</div>;
+			return <Unauthorized />;
 	}
 }

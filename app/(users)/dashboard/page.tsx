@@ -1,6 +1,7 @@
 import DoctorDashboard from "@/app/_pages/doctor/dashboard/page";
 import PatientDashboard from "@/app/_pages/patient/dashboard/page";
 import { ReceptionistDashboard } from "@/app/_pages/receptionist/dashboard/page";
+import Unauthorized from "@/app/_pages/Unauthorized";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";
 
@@ -15,6 +16,6 @@ export default async function Dashboard() {
 		case "Receptionist":
 			return <ReceptionistDashboard />;
 		default:
-			return <div>You are Unauthorized to view this page </div>;
+			return <Unauthorized />;
 	}
 }
