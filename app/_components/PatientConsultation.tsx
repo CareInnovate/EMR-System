@@ -4,10 +4,20 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-
+import InputBox from "./InputBox";
+type examinationData = {
+	vitals?: {
+		temperature?: number;
+		bloodPressure?: string;
+		respiratoryRate?: number;
+		pulseRate?: number;
+	};
+	heent?: string;
+	lgs?: string;
+};
 type consultationData = {
 	symptoms: Set<string>;
-	examination: string[];
+	examination: examinationData;
 	diagnosis: string[];
 	prescription: string[];
 };
@@ -15,10 +25,11 @@ const PatientConsultation = () => {
 	const [consulting, setConsulting] = useState<boolean>(false);
 	const [data, setData] = useState<consultationData>({
 		symptoms: new Set(),
-		examination: [],
+		examination: {},
 		diagnosis: [],
 		prescription: [],
 	});
+	console.log(data);
 
 	const commonSymptoms = [
 		"Fever",
@@ -61,20 +72,29 @@ const PatientConsultation = () => {
 	function handleClick() {
 		setConsulting((prev) => !prev);
 	}
-	function handleSubmit(e: FormEvent<HTMLFormElement>) {
-		e.preventDefault();
-		let input = e.currentTarget.symptom.value as string;
-		input = input.trim();
-		const symptoms = new Set(input.split(/\s*,\s*/));
-		setData((prev) => {
-			const newSet = new Set(prev.symptoms);
+	function handleSubmit(
+		e: FormEvent<HTMLFormElement>,
+		field: string,
+		data: Set<string> | examinationData
+	) {
+		if (field === "symptoms" && data instanceof Set) {
+			setData((prev) => {
+				const newSet = new Set(prev.symptoms);
 
-			return {
-				...prev,
-				symptoms: newSet.union(symptoms),
-			};
-		});
-		e.currentTarget.symptom.value = "";
+				return {
+					...prev,
+					symptoms: newSet.union(data),
+				};
+			});
+			e.currentTarget.reset();
+		} else if (field === "examination" && !(data instanceof Set)) {
+			setData((prev) => {
+				return {
+					...prev,
+					examination: data,
+				};
+			});
+		}
 	}
 	return (
 		<div className="flex flex-col gap-5">
@@ -113,7 +133,17 @@ const PatientConsultation = () => {
 								</div>
 								<form
 									className="flex gap-6 items-end"
-									onSubmit={handleSubmit}
+									onSubmit={(e) => {
+										e.preventDefault();
+										let input = e.currentTarget.symptom
+											.value as string;
+										input = input.trim();
+										const symptoms = new Set(
+											input.split(/\s*,\s*/)
+										);
+										handleSubmit(e, "symptoms", symptoms);
+										e.currentTarget.symptom.value = "";
+									}}
 								>
 									<label className="flex flex-col gap-2 w-full">
 										<span className=" p-2 w-full ">
@@ -166,10 +196,97 @@ const PatientConsultation = () => {
 							</div>
 						</TabPanel>
 						<TabPanel>
-							<div className="py-3 px-2 h-48">
-								Examination goes here
-								<input type="text" name="examination" />
-							</div>
+							<form
+								className="py-3 px-2 h-48 flex flex-col gap-4"
+								onSubmit={(e) => {
+									e.preventDefault();
+									const input = new FormData(e.currentTarget);
+									let inputData: examinationData = {
+										vitals: {
+											temperature: parseInt(
+												input.get(
+													"temperature"
+												) as string
+											),
+											bloodPressure: input.get(
+												"bloodPressure"
+											) as string,
+											respiratoryRate: parseInt(
+												input.get("respRate") as string
+											),
+											pulseRate: parseInt(
+												input.get("pulseRate") as string
+											),
+										},
+										heent: input.get("heent") as string,
+										lgs: input.get("lgs") as string,
+									};
+									handleSubmit(e, "examination", inputData);
+								}}
+							>
+								<div className="p-2 min-h-18 flex flex-col gap-2 ">
+									<p className="py-2 font-bold text-xl">
+										Vitals:
+									</p>
+									<div className="grid grid-cols-4 w-full">
+										<InputBox
+											label="Temperature"
+											name="temperature"
+											placeholder={
+												"Temperature in \u00B0C"
+											}
+											type="number"
+										/>
+										<InputBox
+											label="Blood Pressure"
+											name="bloodPressure"
+											placeholder="Blood Pressure in mmHg"
+										/>
+										<InputBox
+											label="Respiratory Rate"
+											name="respRate"
+											placeholder="Respiratory Rate in bpm"
+											type="number"
+										/>
+										<InputBox
+											label="Pulse Rate"
+											name="pulseRate"
+											placeholder="Pulse Rate in bpm"
+											type="number"
+										/>
+									</div>
+								</div>
+								<div className="grid grid-cols-2 gap-4 pr-5">
+									<div className="p-2 min-h-18 flex flex-col gap-2">
+										<p className="py-2 font-bold text-xl">
+											HEENT:
+										</p>
+										<textarea
+											className="p-2 w-full border border-gray-300 rounded-md"
+											rows={5}
+											name="heent"
+										></textarea>
+									</div>
+									<div className="p-2 min-h-18 flex flex-col gap-2 ">
+										<p className="py-2 font-bold text-xl">
+											LGS:
+										</p>
+										<textarea
+											className="p-2 w-full border border-gray-300 rounded-md"
+											name="lgs"
+											rows={5}
+										></textarea>
+									</div>
+								</div>
+								<div className="lg:col-span-2 flex justify-end w-full mx-auto mt-3 gap-2 pb-5 pr-5">
+									<button
+										type="submit"
+										className="bg-blue-950 text-white w-1/3 py-2 md:w-auto md:py-4 md:px-12 rounded-md"
+									>
+										Save
+									</button>
+								</div>
+							</form>
 						</TabPanel>
 						<TabPanel>
 							<div className="py-3 px-2 h-48">
