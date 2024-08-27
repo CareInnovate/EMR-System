@@ -1,11 +1,7 @@
 "use client";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useState } from "react";
 import { Tab, TabList, TabPanel, Tabs } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import InputBox from "./InputBox";
-import SearchBox from "./SearchBox";
 import Prescription from "./Consultation/Prescription";
 import Diagnosis from "./Consultation/Diagnosis";
 import Symptoms from "./Consultation/Symptoms";
@@ -20,11 +16,18 @@ export type examinationData = {
 	heent?: string;
 	lgs?: string;
 };
+export type prescriptionData = {
+	medication: string;
+	dosage: string;
+	duration: string;
+	quantity: string;
+	instruction?: string;
+};
 export type consultationData = {
 	symptoms: Set<string>;
 	examination: examinationData;
 	diagnosis: string[];
-	prescription: string[];
+	prescription: prescriptionData[];
 };
 const PatientConsultation = () => {
 	const [consulting, setConsulting] = useState<boolean>(false);

@@ -1,11 +1,6 @@
 "use client";
 
-import {
-	faCheckCircle,
-	faXmarkCircle,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 type props = {
 	isOpen: boolean;
@@ -27,7 +22,7 @@ const Popup = ({ isOpen, children }: props) => {
 	return (
 		<dialog
 			ref={modalRef}
-			className="backdrop:bg-gray-400 z-40 w-full md:w-1/3 min-w-48 md:min-w-96 h-96 backdrop:opacity-40 rounded-xl"
+			className="backdrop:bg-gray-400 z-40 w-full md:w-1/2 min-w-48 md:min-w-96 min-h-96 backdrop:opacity-40 rounded-xl h-1/2"
 		>
 			{children}
 		</dialog>

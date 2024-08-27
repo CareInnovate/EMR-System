@@ -6,16 +6,23 @@ type props = {
 	name: "diagnosis" | "prescription";
 	fetchUrl: string;
 	placeholder?: string;
-	setData: Dispatch<SetStateAction<consultationData>>;
+	setData?: Dispatch<SetStateAction<consultationData>>;
+	setMedication?: (med: string) => void;
 };
-const SearchBox = ({ label, name, setData, placeholder, fetchUrl }: props) => {
+const SearchBox = ({
+	label,
+	name,
+	setData,
+	placeholder,
+	fetchUrl,
+	setMedication,
+}: props) => {
 	const [time, setTime] = useState<NodeJS.Timeout>();
 	const [options, setOptions] = useState<Diseases[]>([]);
 	function onChange(e: ChangeEvent<HTMLInputElement>) {
 		if (time) {
 			clearTimeout(time);
 		}
-		console.log("ddoo");
 		const timeout = setTimeout(async () => {
 			const searchParams = new URLSearchParams({
 				search: e.target.value,
@@ -46,15 +53,17 @@ const SearchBox = ({ label, name, setData, placeholder, fetchUrl }: props) => {
 								key={ind}
 								onClick={() => {
 									setOptions([]);
-									setData((prev) => {
-										return {
-											...prev,
-											[name]: [
-												...prev[name],
-												option.name,
-											],
-										};
-									});
+									setData &&
+										setData((prev) => {
+											return {
+												...prev,
+												[name]: [
+													...prev[name],
+													option.name,
+												],
+											};
+										});
+									setMedication && setMedication(option.name);
 								}}
 								className="p-2 bg-gray-50 rounded-md cursor-pointer"
 							>
