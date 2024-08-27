@@ -93,6 +93,30 @@ const PatientConsultation = () => {
 			</div>
 		);
 	});
+	const patientPrescription = data.prescription.map((prescription, ind) => {
+		return (
+			<div
+				className="rounded-3xl px-5 py-2 bg-gray-200 flex items-center gap-3"
+				key={ind}
+			>
+				<p>{prescription}</p>
+				<FontAwesomeIcon
+					icon={faClose}
+					onClick={() => {
+						setData((prev) => {
+							return {
+								...prev,
+								prescription: prev.prescription.filter(
+									(pres, i) => i !== ind
+								),
+							};
+						});
+					}}
+					className="cursor-pointer text-gray-600 mt-0.5"
+				/>
+			</div>
+		);
+	});
 	function handleClick() {
 		setConsulting((prev) => !prev);
 	}
@@ -324,7 +348,7 @@ const PatientConsultation = () => {
 											patientDiagnosis
 										) : (
 											<p className="text-gray-400">
-												No symptoms selected
+												No diagnosis selected
 											</p>
 										)}
 									</div>
@@ -341,9 +365,30 @@ const PatientConsultation = () => {
 							</div>
 						</TabPanel>
 						<TabPanel>
-							<div className="py-3 px-2 h-48">
-								Prescriptions
-								<input type="text" name="review" />
+							<div className="py-3 px-2 h-48 flex flex-col gap-4 ">
+								<div className="p-2 min-h-18 flex flex-col gap-2">
+									<p className="py-2">
+										Patient&apos;s Prescription
+									</p>
+									<div className="flex gap-2">
+										{data.prescription.length > 0 ? (
+											patientPrescription
+										) : (
+											<p className="text-gray-400">
+												No medications selected
+											</p>
+										)}
+									</div>
+								</div>
+								<div className="p-2 min-h-18 flex flex-col gap-2 mt-2">
+									<SearchBox
+										label="Medication"
+										name="prescription"
+										fetchUrl="medications"
+										setData={setData}
+										placeholder="Search for medication ..."
+									/>
+								</div>
 							</div>
 						</TabPanel>
 						<TabPanel>

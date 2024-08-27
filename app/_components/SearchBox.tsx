@@ -3,7 +3,7 @@ import { consultationData } from "./PatientConsultation";
 import { Diseases } from "@prisma/client";
 type props = {
 	label: string;
-	name: string;
+	name: "diagnosis" | "prescription";
 	fetchUrl: string;
 	placeholder?: string;
 	setData: Dispatch<SetStateAction<consultationData>>;
@@ -49,8 +49,8 @@ const SearchBox = ({ label, name, setData, placeholder, fetchUrl }: props) => {
 									setData((prev) => {
 										return {
 											...prev,
-											diagnosis: [
-												...prev.diagnosis,
+											[name]: [
+												...prev[name],
 												option.name,
 											],
 										};
