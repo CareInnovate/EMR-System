@@ -14,6 +14,7 @@ const Prescription = ({ data, setData }: props) => {
 	const [error, setError] = useState<string>("");
 	const [medication, setMedication] = useState<string>("");
 	const quantity = useRef<HTMLInputElement>(null);
+	const additionalInstructions = useRef<HTMLTextAreaElement>(null);
 
 	const [dosage, setDosage] = useState<number>(-1);
 	const [duration, setDuration] = useState<number>(-1);
@@ -41,6 +42,8 @@ const Prescription = ({ data, setData }: props) => {
 							duration: durations[duration],
 							medication: medication,
 							quantity: quantity.current?.value as string,
+							instruction: additionalInstructions.current
+								?.value as string,
 						},
 					],
 				};
@@ -134,7 +137,7 @@ const Prescription = ({ data, setData }: props) => {
 								/>
 							</div>
 						</div>
-						<div className="grid grid-cols-2">
+						<div className="grid grid-cols-2 gap-2">
 							<div className="min-h-24 flex flex-col gap-2">
 								<p className="py-2">Dosage</p>
 								<div className="flex flex-wrap gap-2 ">
@@ -174,6 +177,14 @@ const Prescription = ({ data, setData }: props) => {
 										);
 									})}
 								</div>
+							</div>
+							<div className="col-span-2 mb-2">
+								<p className="py-2">Additional Instructions</p>
+								<textarea
+									className="border border-gray-300 rounded-md px-2 py-1 w-full"
+									rows={3}
+									ref={additionalInstructions}
+								></textarea>
 							</div>
 						</div>
 					</div>

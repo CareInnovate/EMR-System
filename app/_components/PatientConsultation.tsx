@@ -6,6 +6,8 @@ import Prescription from "./Consultation/Prescription";
 import Diagnosis from "./Consultation/Diagnosis";
 import Symptoms from "./Consultation/Symptoms";
 import Examination from "./Consultation/Examination";
+import Review from "./Consultation/Review";
+import { SessionProvider } from "next-auth/react";
 export type examinationData = {
 	vitals?: {
 		temperature?: number;
@@ -76,7 +78,7 @@ const PatientConsultation = () => {
 				</button>
 			</div>
 			{consulting && (
-				<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4 min-h-[500px] overflow-scroll">
+				<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4 min-h-[550px] overflow-scroll h-fit">
 					<Tabs selectedTabClassName="bg-blue-700 text-white rounded-t-lg">
 						<TabList className={"border-b border-blue-700"}>
 							<Tab>Symptoms</Tab>
@@ -102,10 +104,9 @@ const PatientConsultation = () => {
 							<Prescription data={data} setData={setData} />
 						</TabPanel>
 						<TabPanel>
-							<div className="py-3 px-2 h-48">
-								Final Review before finish
-								<input type="text" name="review" />
-							</div>
+							<SessionProvider>
+								<Review data={data} />
+							</SessionProvider>
 						</TabPanel>
 					</Tabs>
 				</div>

@@ -22,7 +22,7 @@ const Popup = ({ isOpen, children }: props) => {
 	return (
 		<dialog
 			ref={modalRef}
-			className="backdrop:bg-gray-400 z-40 w-full md:w-1/2 min-w-48 md:min-w-96 min-h-96 backdrop:opacity-40 rounded-xl h-1/2"
+			className="backdrop:bg-gray-400 z-40 w-full md:w-1/2 min-w-48 md:min-w-96 min-h-96 backdrop:opacity-40 rounded-xl h-fit"
 		>
 			{children}
 		</dialog>
