@@ -94,11 +94,12 @@ model Staff {
 }
 
 model Doctor {
-  id           String        @id @default(uuid())
-  patients     Patient[]
-  staff        Staff         @relation(fields: [staffId], references: [id])
-  staffId      String        @unique
-  appointments Appointment[]
+  id            String          @id @default(uuid())
+  patients      Patient[]
+  staff         Staff           @relation(fields: [staffId], references: [id])
+  staffId       String          @unique
+  appointments  Appointment[]
+  MedicalRecord MedicalRecord[]
 }
 
 model Role {
@@ -172,19 +173,24 @@ model Invoice {
 
 model MedicalRecord {
   id                String       @id @default(uuid())
-  diagnosis         String
-  treatmentPlan     String
-  medicalProcedures String?
+  diagnosis         String[]
+  treatmentPlan     String?
+  medicalProcedures Json?
   notes             String?
-  symptoms          Symptom[]
+  symptoms          String[]
   prescription      Medication[]
+  medsInstruction   String?
   labResults        LabResult[]
   appointment       Appointment  @relation(fields: [appointmentId], references: [id])
   appointmentId     String       @unique
   patient           Patient      @relation(fields: [patientId], references: [id])
   patientId         String
+  doctor            Doctor       @relation(fields: [doctorId], references: [id])
+  doctorId          String       @default("84217cb9-4af4-4a92-941d-3d26fb64e2de")
   createdAt         DateTime     @default(now())
   updatedAt         DateTime     @updatedAt
+  Symptom           Symptom?     @relation(fields: [symptomId], references: [id])
+  symptomId         String?
 }
 
 model Symptom {

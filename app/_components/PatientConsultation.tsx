@@ -8,6 +8,11 @@ import Symptoms from "./Consultation/Symptoms";
 import Examination from "./Consultation/Examination";
 import Review from "./Consultation/Review";
 import { SessionProvider } from "next-auth/react";
+import { useConfirm } from "../_hooks/useConfirm";
+import Popup from "./Popup";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import { Medication } from "@prisma/client";
 export type examinationData = {
 	vitals?: {
 		temperature?: number;
@@ -19,7 +24,7 @@ export type examinationData = {
 	lgs?: string;
 };
 export type prescriptionData = {
-	medication: string;
+	medication?: Medication;
 	dosage: string;
 	duration: string;
 	quantity: string;
@@ -31,7 +36,13 @@ export type consultationData = {
 	diagnosis: string[];
 	prescription: prescriptionData[];
 };
-const PatientConsultation = () => {
+const PatientConsultation = ({
+	patientId,
+	doctorId,
+}: {
+	patientId: string;
+	doctorId: string;
+}) => {
 	const [consulting, setConsulting] = useState<boolean>(false);
 	const [data, setData] = useState<consultationData>({
 		symptoms: new Set(),
@@ -39,9 +50,24 @@ const PatientConsultation = () => {
 		diagnosis: [],
 		prescription: [],
 	});
+	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 
-	function handleClick() {
-		setConsulting((prev) => !prev);
+	async function handleSave() {
+		await fetch("http://localhost:3000/api/medicalRecord", {
+			method: "POST",
+			body: JSON.stringify({
+				patientId: patientId,
+				doctorId: doctorId,
+				data: data,
+			}),
+		});
+	}
+	async function handleClick() {
+		let confirmed = true;
+		if (consulting) {
+			confirmed = (await confirm()) as boolean;
+		}
+		confirmed && setConsulting((prev) => !prev);
 	}
 	function handleSubmit(
 		e: FormEvent<HTMLFormElement>,
@@ -69,12 +95,38 @@ const PatientConsultation = () => {
 	}
 	return (
 		<div className="flex flex-col gap-5">
+			<Popup isOpen={open}>
+				<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-around gap-5 text-center">
+					<FontAwesomeIcon
+						icon={faWarning}
+						className={`text-7xl text-orange-400`}
+					/>
+					<div className="text-gray-600 text-xl">
+						<p>Are you sure you want to stop the consultation?</p>
+						<p>Your data will be lost</p>
+					</div>
+					<div className="flex w-full justify-end gap-2">
+						<button
+							className="py-2 px-5 rounded-md text-xl border border-blue-950 text-blue-900"
+							onClick={handleCancel}
+						>
+							No
+						</button>
+						<button
+							className="py-2 px-5 rounded-md text-xl bg-blue-900 text-white"
+							onClick={handleConfirm}
+						>
+							Yes
+						</button>
+					</div>
+				</div>
+			</Popup>
 			<div className="w-full flex justify-end">
 				<button
 					className="px-5 py-2 bg-blue-900 text-white hover:bg-blue-700 hover:text-white rounded-md"
 					onClick={handleClick}
 				>
-					{consulting ? "Finish" : "Start"} Consultation
+					{consulting ? "Stop" : "Start"} Consultation
 				</button>
 			</div>
 			{consulting && (
@@ -105,7 +157,7 @@ const PatientConsultation = () => {
 						</TabPanel>
 						<TabPanel>
 							<SessionProvider>
-								<Review data={data} />
+								<Review data={data} handleSave={handleSave} />
 							</SessionProvider>
 						</TabPanel>
 					</Tabs>

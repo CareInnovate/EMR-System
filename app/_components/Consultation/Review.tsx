@@ -1,19 +1,15 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { consultationData } from "../PatientConsultation";
 import { useSession } from "next-auth/react";
 
-const Review = ({ data }: { data: consultationData }) => {
+const Review = ({
+	data,
+	handleSave,
+}: {
+	data: consultationData;
+	handleSave: MouseEventHandler<HTMLButtonElement>;
+}) => {
 	const doctor = useSession();
-	async function handleSave() {
-		await fetch("http://localhost:3000/api/medicalRecord", {
-			method: "POST",
-			body: JSON.stringify({
-				patientId: "",
-				doctorId: doctor.data?.user.id,
-				data: data,
-			}),
-		});
-	}
 
 	const patientSymptoms = Array.from(data.symptoms).map((symptom, ind) => {
 		return (
@@ -41,7 +37,7 @@ const Review = ({ data }: { data: consultationData }) => {
 				className="rounded-3xl px-5 py-2 bg-gray-200 flex items-center gap-3"
 				key={ind}
 			>
-				<p>{prescription.medication}</p>
+				<p>{prescription.medication?.name}</p>
 			</div>
 		);
 	});

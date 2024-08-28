@@ -1,13 +1,13 @@
 import React, { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { consultationData } from "./PatientConsultation";
-import { Diseases } from "@prisma/client";
+import { Diseases, Medication } from "@prisma/client";
 type props = {
 	label: string;
 	name: "diagnosis" | "prescription";
 	fetchUrl: string;
 	placeholder?: string;
 	setData?: Dispatch<SetStateAction<consultationData>>;
-	setMedication?: (med: string) => void;
+	setMedication?: (med: Medication) => void;
 };
 const SearchBox = ({
 	label,
@@ -18,7 +18,7 @@ const SearchBox = ({
 	setMedication,
 }: props) => {
 	const [time, setTime] = useState<NodeJS.Timeout>();
-	const [options, setOptions] = useState<Diseases[]>([]);
+	const [options, setOptions] = useState<Diseases[] | Medication[]>([]);
 	function onChange(e: ChangeEvent<HTMLInputElement>) {
 		if (time) {
 			clearTimeout(time);
@@ -63,7 +63,8 @@ const SearchBox = ({
 												],
 											};
 										});
-									setMedication && setMedication(option.name);
+									setMedication &&
+										setMedication(option as Medication);
 								}}
 								className="p-2 bg-gray-50 rounded-md cursor-pointer"
 							>

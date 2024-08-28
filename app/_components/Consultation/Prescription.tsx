@@ -4,6 +4,7 @@ import { consultationData } from "../PatientConsultation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import Popup from "../Popup";
+import { Medication } from "@prisma/client";
 
 export type props = {
 	data: consultationData;
@@ -12,7 +13,7 @@ export type props = {
 const Prescription = ({ data, setData }: props) => {
 	const [popup, setPopup] = useState<boolean>(false);
 	const [error, setError] = useState<string>("");
-	const [medication, setMedication] = useState<string>("");
+	const [medication, setMedication] = useState<Medication>();
 	const quantity = useRef<HTMLInputElement>(null);
 	const additionalInstructions = useRef<HTMLTextAreaElement>(null);
 
@@ -58,7 +59,7 @@ const Prescription = ({ data, setData }: props) => {
 				className="rounded-3xl px-5 py-2 bg-gray-200 flex items-center gap-3"
 				key={ind}
 			>
-				<p>{prescription.medication}</p>
+				<p>{prescription.medication?.name}</p>
 				<FontAwesomeIcon
 					icon={faClose}
 					onClick={() => {
@@ -96,7 +97,7 @@ const Prescription = ({ data, setData }: props) => {
 						label="Medication"
 						name="prescription"
 						fetchUrl="medications"
-						setMedication={(med: string) => {
+						setMedication={(med: Medication) => {
 							setMedication(med);
 							setPopup(true);
 						}}
@@ -122,7 +123,7 @@ const Prescription = ({ data, setData }: props) => {
 					>
 						<div className="flex flex-col gap-5 justify-center">
 							<h1>
-								<strong>Medication:</strong> {medication}
+								<strong>Medication:</strong> {medication?.name}
 							</h1>
 							<div className="flex gap-3 items-center mt-2">
 								<h1>Quantity:</h1>
