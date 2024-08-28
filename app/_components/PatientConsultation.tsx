@@ -27,7 +27,7 @@ export type prescriptionData = {
 	medication?: Medication;
 	dosage: string;
 	duration: string;
-	quantity: string;
+	quantity: number;
 	instruction?: string;
 };
 export type consultationData = {
