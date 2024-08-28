@@ -31,11 +31,10 @@ model Patient {
   emergencyContactName     String?
   emergencyContactMobileNo String?
   patientRecord            PatientRecord?
-  doctor                   Doctor?         @relation(fields: [doctorId], references: [id])
-  doctorId                 String?
   appointments             Appointment[]
   invoices                 Invoice[]
   medicalRecords           MedicalRecord[]
+  Doctor                   Doctor[]
 }
 
 model PatientRecord {
@@ -54,14 +53,15 @@ model PatientRecord {
 }
 
 model Appointment {
-  id            String         @id @default(uuid())
-  type          String
+  id            String            @id @default(uuid())
+  type          String            @default("Consultation")
+  status        AppointmentStatus @default(Scheduled)
   datetime      DateTime
-  scheduledAt   DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  patient       Patient        @relation(fields: [patientId], references: [id])
-  doctor        Doctor         @relation(fields: [doctorId], references: [id])
+  scheduledAt   DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  patient       Patient           @relation(fields: [patientId], references: [id])
   patientId     String
+  doctor        Doctor            @relation(fields: [doctorId], references: [id])
   doctorId      String
   MedicalRecord MedicalRecord?
 }
@@ -82,7 +82,6 @@ model Staff {
   mobileNumber     String           @unique
   email            String           @unique
   role             Role             @relation(fields: [roleId], references: [id])
-  specialization   String?
   hireDate         DateTime         @default(now())
   emergencyContact String?
   employmentStatus EmploymentStatus
@@ -94,12 +93,13 @@ model Staff {
 }
 
 model Doctor {
-  id            String          @id @default(uuid())
-  patients      Patient[]
-  staff         Staff           @relation(fields: [staffId], references: [id])
-  staffId       String          @unique
-  appointments  Appointment[]
-  MedicalRecord MedicalRecord[]
+  id             String          @id @default(uuid())
+  specialization String?
+  patients       Patient[]
+  staff          Staff           @relation(fields: [staffId], references: [id])
+  staffId        String          @unique
+  appointments   Appointment[]
+  MedicalRecord  MedicalRecord[]
 }
 
 model Role {
@@ -131,6 +131,18 @@ model OTP {
   @@unique([mobileNumber, passcode])
 }
 
+model Prescription {
+  id              String        @id @default(uuid())
+  dosage          String
+  duration        String
+  quantity        Int           @default(1)
+  instruction     String?
+  medication      Medication    @relation(fields: [medicationId], references: [id])
+  medicationId    String
+  MedicalRecord   MedicalRecord @relation(fields: [medicalRecordId], references: [id])
+  medicalRecordId String
+}
+
 model Medication {
   id                 String               @id @default(uuid())
   name               String
@@ -138,7 +150,7 @@ model Medication {
   price              Float
   available          Int
   invoice_Medication Invoice_Medication[]
-  medicalRecord      MedicalRecord[]
+  Prescription       Prescription[]
 }
 
 model Invoice_Medication {
@@ -172,24 +184,24 @@ model Invoice {
 }
 
 model MedicalRecord {
-  id                String       @id @default(uuid())
+  id                String         @id @default(uuid())
   diagnosis         String[]
   treatmentPlan     String?
   medicalProcedures Json?
   notes             String?
   symptoms          String[]
-  prescription      Medication[]
+  prescription      Prescription[]
   medsInstruction   String?
   labResults        LabResult[]
-  appointment       Appointment  @relation(fields: [appointmentId], references: [id])
-  appointmentId     String       @unique
-  patient           Patient      @relation(fields: [patientId], references: [id])
+  appointment       Appointment    @relation(fields: [appointmentId], references: [id])
+  appointmentId     String         @unique
+  patient           Patient        @relation(fields: [patientId], references: [id])
   patientId         String
-  doctor            Doctor       @relation(fields: [doctorId], references: [id])
-  doctorId          String       @default("84217cb9-4af4-4a92-941d-3d26fb64e2de")
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-  Symptom           Symptom?     @relation(fields: [symptomId], references: [id])
+  doctor            Doctor         @relation(fields: [doctorId], references: [id])
+  doctorId          String         @default("84217cb9-4af4-4a92-941d-3d26fb64e2de")
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  Symptom           Symptom?       @relation(fields: [symptomId], references: [id])
   symptomId         String?
 }
 
@@ -226,4 +238,11 @@ enum EmploymentStatus {
 enum InvoiceStatus {
   Paid
   Unpaid
+}
+
+enum AppointmentStatus {
+  Scheduled
+  InProgress
+  Completed
+  CheckedIn
 }
