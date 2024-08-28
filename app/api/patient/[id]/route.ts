@@ -81,25 +81,24 @@ export async function POST(
 					],
 				},
 			},
-			doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
 			medicalRecords: {
 				createMany: {
 					data: [
 						{
 							appointmentId: "1st-app",
-							diagnosis: "Common Cold",
+							diagnosis: ["Common Cold"],
 							treatmentPlan: "Example treatment plan",
 							notes: "Example notes",
 						},
 						{
 							appointmentId: "2nd-app",
-							diagnosis: "Diabetes",
+							diagnosis: ["Diabetes"],
 							treatmentPlan: "Example treatment plan",
 							notes: "Example notes",
 						},
 						{
 							appointmentId: "3rd-app",
-							diagnosis: "Cancer",
+							diagnosis: ["Cancer"],
 							treatmentPlan: "Example treatment plan",
 							notes: "Example notes",
 						},
