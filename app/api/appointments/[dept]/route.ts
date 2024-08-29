@@ -17,7 +17,9 @@ export async function GET(
 		where: {
 			workingHours: {
 				some: {
-					date: "Thursday",
+					date: startTime.toLocaleDateString("en-US", {
+						weekday: "long",
+					}),
 				},
 			},
 			staff: {
@@ -45,8 +47,8 @@ export async function GET(
 	doctors.forEach((doctor) => {
 		doctor.appointments.forEach((app) => {
 			const datetime = new Date(app.datetime);
-			const timeString = `${padTime(datetime.getUTCHours())}:${padTime(
-				datetime.getUTCMinutes()
+			const timeString = `${padTime(datetime.getHours())}:${padTime(
+				datetime.getMinutes()
 			)}`;
 			timeSlots[timeString] =
 				timeSlots[timeString] !== undefined
@@ -71,6 +73,80 @@ export async function GET(
 	});
 
 	return NextResponse.json(timeSlots);
+}
+
+export async function POST(
+	req: NextRequest,
+	{ params }: { params: { dept: string } }
+) {
+	const data: { date: string; patientId: string } = await req.json();
+	const date = new Date(data.date);
+	const doctor = await prisma.doctor.findMany({
+		include: {
+			_count: {
+				select: {
+					appointments: true,
+				},
+			},
+		},
+		where: {
+			staff: {
+				departmentId: params.dept,
+			},
+			workingHours: {
+				some: {
+					date: date.toLocaleDateString("en-US", {
+						weekday: "long",
+					}),
+					from: {
+						lte: date.getHours(),
+					},
+					to: {
+						gte: date.getHours(),
+					},
+				},
+			},
+			appointments: {
+				none: {
+					datetime: {
+						equals: data.date,
+					},
+				},
+			},
+		},
+		orderBy: {
+			appointments: {
+				_count: "asc",
+			},
+		},
+	});
+	if (doctor) {
+		const appointment = await prisma.appointment.create({
+			data: {
+				datetime: data.date,
+				patientId: data.patientId,
+				doctorId: doctor[0].id,
+			},
+			include: {
+				doctor: {
+					select: {
+						staff: {
+							select: {
+								firstName: true,
+								middleName: true,
+							},
+						},
+					},
+				},
+			},
+		});
+		return NextResponse.json(appointment);
+	} else {
+		return NextResponse.json(
+			{ error: "No available doctors found for the selected time." },
+			{ status: 404 }
+		);
+	}
 }
 function initializeSlots(): Record<string, number> {
 	const slots: Record<string, number> = {};
