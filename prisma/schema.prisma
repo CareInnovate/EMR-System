@@ -106,11 +106,11 @@ model Doctor {
 }
 
 model WorkingHours {
-  id       String   @id @default(uuid())
-  date     DateTime
-  from     DateTime
-  to       DateTime
-  doctor   Doctor   @relation(fields: [doctorId], references: [id])
+  id       String @id @default(uuid())
+  date     String
+  from     Int
+  to       Int
+  doctor   Doctor @relation(fields: [doctorId], references: [id])
   doctorId String
 }
 

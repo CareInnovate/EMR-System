@@ -229,7 +229,9 @@ d5f99ae5-c78d-4a44-8807-5d5e16c3737d	Vivitrol	Also known as Naltrexone	1229.99	5
 bd1c8a5e-fbfb-45c9-8cd5-895f1b862558	Cymbalta	Also known as Duloxetine	19.99	50
 \.
 
-
+COPY public."Department" (id, name, description) FROM stdin;
+general-id	General	General department for hospital
+\.
 
 --
 -- Data for Name: Patient; Type: TABLE DATA; Schema: public; Owner: postgres
@@ -276,7 +278,7 @@ role-administrator	Administrator
 --
 
 COPY public."Staff" (id, username, password, "firstName", "middleName", "lastName", sex, "birthDate", region, city, woreda, kebele, "mobileNumber", email, "hireDate", "emergencyContact", "employmentStatus", notes, "departmentId", "roleId") FROM stdin;
-d1f01f67-6b20-4316-add4-81dd4415fac9	drjohnsmith	securepassword123	John	Michael	Smith	MALE	1980-06-15 00:00:00	Addis Ababa	Addis Ababa	04	12	0912345678	john.smith@example.com	2015-03-25 00:00:00	0911234567	Active	{"Highly experienced in cardiac surgeries"}	\N	role-doctor
+d1f01f67-6b20-4316-add4-81dd4415fac9	drjohnsmith	securepassword123	John	Michael	Smith	MALE	1980-06-15 00:00:00	Addis Ababa	Addis Ababa	04	12	0912345678	john.smith@example.com	2015-03-25 00:00:00	0911234567	Active	{"Highly experienced in cardiac surgeries"}	general-id	role-doctor
 staff-002	reception001	securepassword456	Martha	Jane	Doe	FEMALE	1992-08-20 00:00:00	Oromia	Adama	03	15	0912345679	martha.doe@example.com	2018-06-01 00:00:00	0911234568	Active	{"Excellent communication skills"}	\N	role-receptionist
 staff-003	admin001	securepassword789	David	Andrew	Johnson	MALE	1975-12-05 00:00:00	Amhara	Bahir Dar	02	8	0912345680	david.johnson@example.com	2012-01-15 00:00:00	0911234569	Active	{"Experienced in hospital administration"}	\N	role-administrator
 \.
@@ -290,12 +292,14 @@ COPY public."Doctor" (id, "staffId","specialization") FROM stdin;
 84217cb9-4af4-4a92-941d-3d26fb64e2de	d1f01f67-6b20-4316-add4-81dd4415fac9	Cardiology
 \.
 
-COPY public."Appointment" (id, type, datetime, "scheduledAt", "updatedAt", "patientId", "doctorId") FROM stdin;
-3ff9bcfc-3b89-4929-aa9c-329a39ef8da5	Check up	2024-11-05 00:00:00	2024-08-14 11:16:44.795	2024-08-14 11:16:44.795	patient-1	84217cb9-4af4-4a92-941d-3d26fb64e2de
-3rd-app	Check-up	2024-07-20 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de
-2nd-app	Check-up	2024-05-10 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de
-1st-app	Check-up	2024-05-15 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de
+COPY public."Appointment" (id, type, datetime, "scheduledAt", "updatedAt", "patientId", "doctorId", status) FROM stdin;
+3ff9bcfc-3b89-4929-aa9c-329a39ef8da5	Check up	2024-11-05 00:00:00	2024-08-14 11:16:44.795	2024-08-14 11:16:44.795	patient-1	84217cb9-4af4-4a92-941d-3d26fb64e2de	Scheduled
+3rd-app	Check-up	2024-07-20 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de	Scheduled
+2nd-app	Check-up	2024-05-10 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de	Scheduled
+1st-app	Check-up	2024-05-15 00:00:00	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de	Scheduled
+4th-app	Check-up	2024-08-29 12:00:00	2024-08-29 13:40:05.411	2024-08-29 00:00:00	9206f122-5800-4126-a557-dbbfc4b03ea0	84217cb9-4af4-4a92-941d-3d26fb64e2de	Scheduled
 \.
+
 
 
 --
@@ -326,16 +330,16 @@ COPY public."LabResult" (id, "medicalRecordId") FROM stdin;
 \.
 
 
+
 --
 -- Data for Name: MedicalRecord; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."MedicalRecord" (id, "treatmentPlan", notes, "appointmentId", "patientId", "createdAt", "updatedAt", "medsInstruction", diagnosis, "medicalProcedures") FROM stdin;
-895d5f79-d0e8-4f36-b660-1d5ac8f8b6da	Example treatment plan	Example notes	1st-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N
-c8ed3db1-12ff-4ad7-b676-664bfdd2d0e3	Example treatment plan	Example notes	2nd-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N
-dffdf364-7cbd-4f3a-b9b1-d0e581aa1237	Example treatment plan	Example notes	3rd-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N
+COPY public."MedicalRecord" (id, "treatmentPlan", notes, "appointmentId", "patientId", "createdAt", "updatedAt", "medsInstruction", diagnosis, "medicalProcedures", "symptomId", symptoms, "doctorId") FROM stdin;
+895d5f79-d0e8-4f36-b660-1d5ac8f8b6da	Example treatment plan	Example notes	1st-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N	\N	\N	84217cb9-4af4-4a92-941d-3d26fb64e2de
+c8ed3db1-12ff-4ad7-b676-664bfdd2d0e3	Example treatment plan	Example notes	2nd-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N	\N	\N	84217cb9-4af4-4a92-941d-3d26fb64e2de
+dffdf364-7cbd-4f3a-b9b1-d0e581aa1237	Example treatment plan	Example notes	3rd-app	9206f122-5800-4126-a557-dbbfc4b03ea0	2024-08-20 09:15:28.449	2024-08-20 09:15:28.449	\N	\N	\N	\N	\N	84217cb9-4af4-4a92-941d-3d26fb64e2de
 \.
-
 
 
 --
@@ -355,6 +359,14 @@ COPY public."PatientRecord" (id, "patientType", "patientCondition", allergies, "
 22abb26b-9361-4e0b-b16c-7f91cf333818	Out	Mild	{Peanuts}	myopia	120/80	184	9206f122-5800-4126-a557-dbbfc4b03ea0	\N	55	B+
 \.
 
+
+--
+-- Data for Name: WorkingHours; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public."WorkingHours" (id, date, "doctorId", "from", "to") FROM stdin;
+thur-wh	Thursday	84217cb9-4af4-4a92-941d-3d26fb64e2de	9	17
+\.
 
 
 
@@ -406,30 +418,6 @@ COPY public."_MedicalRecordToMedication" ("A", "B") FROM stdin;
 COPY public."_MedicalRecordToSymptom" ("A", "B") FROM stdin;
 \.
 
-
---
--- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
-aca39845-8ba8-4be3-9199-a3bfd415670b	6527323c5c59f7afe7b48634685140146360479bbe2255a452f71ce5d136e1f3	2024-08-06 20:00:23.560979+03	20240806170023_init	\N	\N	2024-08-06 20:00:23.528708+03	1
-1edf9929-080b-4739-b69f-eafe60263b6d	dddfe49841ec5d8344f8dde137b3ddb08342f2431789dc91f87917f2d0ec1ea0	2024-08-20 12:13:48.879031+03	20240820091348_updated_blood_pressure_bloodtype	\N	\N	2024-08-20 12:13:48.859928+03	1
-a906b5f5-4984-429b-bc68-e664a11ae730	0e5430138cc466909d3050634a8ef08fb3ed530a0879ff27900a69af2f9329db	2024-08-07 12:49:12.674991+03	20240807094912_test2	\N	\N	2024-08-07 12:49:12.651507+03	1
-19f890b0-da66-4e5a-9960-79eae0e94392	c2aaceb91c8f43809bf343d00a3e63744a212f3e2afef08f1d8129112415cc15	2024-08-07 13:46:15.89244+03	20240807104615_base	\N	\N	2024-08-07 13:46:15.84842+03	1
-791d81f6-e2a3-4b06-aa9d-1cd9707431e0	188ee0fea8a30194380ca54fd26a21aef8bb7593e0d65b93bc8476e1336acc5f	2024-08-09 13:42:21.036221+03	20240809104221_unique_constraints_added	\N	\N	2024-08-09 13:42:21.01679+03	1
-ab83faba-b802-45f3-a772-7367a2a1c968	87a52d07f0465d84455d469d934eee859bd4091346434b1f1460829e18b606c3	2024-08-26 17:33:51.249775+03	20240826143351_added_a_model_to_hold_common_diseases	\N	\N	2024-08-26 17:33:51.233118+03	1
-c1a10e16-c915-48a6-aad7-0a890649f39f	bd1d1dc7518d141ac6749999fc3e8c57a161c3da4f58fd0a1c5c0130b2cdd8f6	2024-08-09 14:25:01.569177+03	20240809112501_added_otp	\N	\N	2024-08-09 14:25:01.557163+03	1
-cde015ff-4e7e-4317-9cc1-a69faae33094	cf59f30500ab7b1eaf1252b2504815dd8c42819b94a0a409c0e33bfa89631ecf	2024-08-09 14:44:39.686024+03	20240809114439_added_password_field_for_patients	\N	\N	2024-08-09 14:44:39.679398+03	1
-b9e7d0bb-6932-4d1e-8266-457f359bd318	7f4af0096a6ea746b96aabb91373a49cde6729978e88d7e956c79b06adda12b3	2024-08-09 14:45:03.829587+03	20240809114503_deleted_default_password	\N	\N	2024-08-09 14:45:03.823124+03	1
-93b874d9-e419-4772-90c4-0954a10d433c	9e463d86dd7e13687a2fb5f1ba09a487e8a35721212f2dcd4dd31af8394a4aac	2024-08-27 16:51:16.918083+03	20240827135116_made_edits_to_medical_record_table	\N	\N	2024-08-27 16:51:16.911396+03	1
-746989b3-b02a-4107-9d06-da579da31bcb	bb91606351fce5aafd4710d2aa229a9f3741489def82a0a0fcd1c7ab5c29e8c3	2024-08-11 12:08:17.52224+03	20240811090817_added_payment_schemas	\N	\N	2024-08-11 12:08:17.48007+03	1
-8f94361a-5439-453b-b7ca-8269a2ddc035	a1c03cabf05e2cf3464e305fee8bf5a15ad641d3e57b53a0fed95f473c6326e9	2024-08-11 13:01:45.736727+03	20240811100145_better_invoice_relations	\N	\N	2024-08-11 13:01:45.720084+03	1
-c10bafb3-db65-4bcf-b16b-6b7e03cbc46c	4d100a63235b612b5d9a99e4705f807100cf733eb3e3d7dc0117bfca55145312	\N	20240827135553_added_doctor_field_for_medical_record	A migration failed to apply. New migrations cannot be applied before the error is recovered from. Read more about how to resolve migration issues in a production database: https://pris.ly/d/migrate-resolve\n\nMigration name: 20240827135553_added_doctor_field_for_medical_record\n\nDatabase error code: 23503\n\nDatabase error:\nERROR: insert or update on table "MedicalRecord" violates foreign key constraint "MedicalRecord_doctorId_fkey"\nDETAIL: Key (doctorId)=(d1f01f67-6b20-4316-add4-81dd4415fac9) is not present in table "Doctor".\n\nDbError { severity: "ERROR", parsed_severity: Some(Error), code: SqlState(E23503), message: "insert or update on table \\"MedicalRecord\\" violates foreign key constraint \\"MedicalRecord_doctorId_fkey\\"", detail: Some("Key (doctorId)=(d1f01f67-6b20-4316-add4-81dd4415fac9) is not present in table \\"Doctor\\"."), hint: None, position: None, where_: None, schema: Some("public"), table: Some("MedicalRecord"), column: None, datatype: None, constraint: Some("MedicalRecord_doctorId_fkey"), file: Some("ri_triggers.c"), line: Some(2608), routine: Some("ri_ReportViolation") }\n\n   0: sql_schema_connector::apply_migration::apply_script\n           with migration_name="20240827135553_added_doctor_field_for_medical_record"\n             at schema-engine/connectors/sql-schema-connector/src/apply_migration.rs:106\n   1: schema_core::commands::apply_migrations::Applying migration\n           with migration_name="20240827135553_added_doctor_field_for_medical_record"\n             at schema-engine/core/src/commands/apply_migrations.rs:91\n   2: schema_core::state::ApplyMigrations\n             at schema-engine/core/src/state.rs:226	\N	2024-08-27 16:55:53.931147+03	0
-ff89ea2a-60c3-4929-9435-29b3f1a25742	ad8655f34fed1456a06ca4f1f280b77eb57d19b34ee2b9ef9b8973a0b084fd21	2024-08-14 11:51:32.428982+03	20240814085132_added_medical_records	\N	\N	2024-08-14 11:51:32.368214+03	1
-2e9fa682-cd22-4e47-a4cc-d34f301359e6	c603ea7b7ab04ffc26ad67fdbf1e79779bc0261c6cc9c4cc6c72a025882cf118	2024-08-14 14:02:19.84223+03	20240814110219_misspelled_permission	\N	\N	2024-08-14 14:02:19.827342+03	1
-99f15b10-77b3-436f-bfa4-cb6262fbf5e0	22f5455cb04289c17031e14a432569163742bbdb778c94034c4181ca0bc4e68d	2024-08-16 13:17:45.493643+03	20240816101745_moved_bloodtype_to_patient_record_table	\N	\N	2024-08-16 13:17:45.484839+03	1
-f8b73860-1e02-4516-be09-573542330f08	bd031017f85ee1d72b4f0a8a43d6f2c6f135de99dcd4abd3f489b2562b5c7c95	2024-08-18 11:56:29.141277+03	20240818085629_changed_kebele_s_data_type	\N	\N	2024-08-18 11:56:29.12013+03	1
-\.
 
 
 --
