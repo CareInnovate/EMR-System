@@ -42,7 +42,9 @@ const Prescription = ({ data, setData }: props) => {
 							dosage: dosages[dosage],
 							duration: durations[duration],
 							medication: medication,
-							quantity: quantity.current?.value as string,
+							quantity: parseInt(
+								quantity.current?.value as string
+							),
 							instruction: additionalInstructions.current
 								?.value as string,
 						},
