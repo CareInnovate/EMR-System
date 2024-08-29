@@ -64,6 +64,8 @@ model Appointment {
   doctor        Doctor            @relation(fields: [doctorId], references: [id])
   doctorId      String
   MedicalRecord MedicalRecord?
+
+  @@unique([datetime, doctorId])
 }
 
 model Staff {
@@ -95,11 +97,21 @@ model Staff {
 model Doctor {
   id             String          @id @default(uuid())
   specialization String?
+  workingHours   WorkingHours[]
   patients       Patient[]
   staff          Staff           @relation(fields: [staffId], references: [id])
   staffId        String          @unique
   appointments   Appointment[]
   MedicalRecord  MedicalRecord[]
+}
+
+model WorkingHours {
+  id       String   @id @default(uuid())
+  date     DateTime
+  from     DateTime
+  to       DateTime
+  doctor   Doctor   @relation(fields: [doctorId], references: [id])
+  doctorId String
 }
 
 model Role {
