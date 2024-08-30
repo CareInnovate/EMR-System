@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { useConfirm } from "../_hooks/useConfirm";
 import { useCalendar } from "../_hooks/useCalendar";
+import AppointmentForm from "./AppointmentForm";
 
 const DnDCalendar = withDragandDrop<event>(BigCalendar);
 export type event = {
@@ -20,14 +21,12 @@ export type event = {
 export type resource = {
 	id: string;
 	title: string;
+	deptId: string;
 };
 type props = {
 	resources: resource[];
 	initialEvents: event[];
 };
-
-//TODO: add Props to enter the doctors that the receptionist
-//handles(based on department) and the events of the week(patients)
 
 //TODO: add a way to create and edit appointments by double clicking
 //on empty slots and submitting forms
@@ -35,6 +34,32 @@ const Calendar = ({ resources, initialEvents }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 	const [events, setEvents] = useState<event[]>(initialEvents);
+	// const resources = [
+	// 	{ id: "1", title: "Dr. John Smith", deptId: "general-id" },
+	// 	{ id: "2", title: "Dr. Anna Frank", deptId: "general-id" },
+	// 	{ id: "3", title: "Dr. Tom Cat", deptId: "general-id" },
+	// ];
+	// const [events, setEvents] = useState<event[]>([
+	// 	//temporary demo data
+	// 	{
+	// 		start: moment("2024-08-30T11:00").toDate(),
+	// 		end: moment("2024-08-30T11:30").toDate(),
+	// 		title: "Hello there",
+	// 		data: {
+	// 			id: "1",
+	// 		},
+	// 		resourceId: "1",
+	// 	},
+	// 	{
+	// 		start: moment("2024-08-30T11:00").toDate(),
+	// 		end: moment("2024-08-30T12:00").toDate(),
+	// 		title: "Hello World",
+	// 		data: {
+	// 			id: "2",
+	// 		},
+	// 		resourceId: "2",
+	// 	},
+	// ]);
 	const { message, currentEvent, handleDrop } = useCalendar(
 		setEvents,
 		resources,

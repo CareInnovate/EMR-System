@@ -152,8 +152,11 @@ export async function PUT(
 	req: NextRequest,
 	{ params }: { params: { dept: string } }
 ) {
-	const data: { date: string; patientId: string; appointmentId: string } =
-		await req.json();
+	const data: {
+		date: string;
+		appointmentId: string;
+		doctorId: string;
+	} = await req.json();
 	const date = new Date(data.date);
 	const appointment = await prisma.appointment.update({
 		where: {
@@ -161,6 +164,7 @@ export async function PUT(
 		},
 		data: {
 			datetime: date,
+			doctorId: data.doctorId,
 		},
 		include: {
 			doctor: {

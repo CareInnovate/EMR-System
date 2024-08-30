@@ -40,6 +40,7 @@ export default function PatientAppointments({
 		appId: string;
 		dept?: string;
 		datetime?: Date;
+		docId?: string;
 	}>();
 	const form = useRef<HTMLFormElement>(null);
 	async function handleSubmit() {
@@ -53,6 +54,7 @@ export default function PatientAppointments({
 			date: new Date(`${date}T${time}`),
 			patientId: patientId,
 			appointmentId: edit?.appId,
+			doctorId: edit?.docId,
 		};
 		const res = await fetch(
 			`http://localhost:3000/api/appointments/${formData.get(
@@ -196,6 +198,7 @@ export default function PatientAppointments({
 												appId: app.id,
 												dept: app.doctor.staff
 													.department?.id,
+												docId: app.doctorId,
 											});
 											setPopup(PopupTypes.Update);
 										}}
