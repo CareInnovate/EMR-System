@@ -6,15 +6,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Patient } from "@prisma/client";
-import Link from "next/link";
 import { FormEvent, useRef, useState } from "react";
 
-export default function DoctorSearch({
-	fullWidth,
-	noTop,
+export default function PatientSearch({
+	selectPatient,
 }: {
-	fullWidth?: boolean;
-	noTop?: boolean;
+	selectPatient: (patient: Patient) => void;
 }) {
 	const [open, setOpen] = useState<boolean>(false);
 	const [patients, setPatients] = useState<Patient[]>();
@@ -37,11 +34,7 @@ export default function DoctorSearch({
 	}
 
 	return (
-		<main
-			className={`flex flex-col p-6 ${
-				fullWidth ? "w-full" : "w-3/4"
-			} mx-auto ${!noTop && "mt-24"} gap-6 h-5/6`}
-		>
+		<main className="flex flex-col p-6 w-full mx-auto my-auto gap-6 h-5/6">
 			<form
 				className="bg-white p-6 rounded-md text-xl border border-gray-400 flex flex-col gap-4 w-full"
 				onSubmit={handleSubmit}
@@ -111,21 +104,23 @@ export default function DoctorSearch({
 					</div>
 					{patients.map((patient, ind) => {
 						return (
-							<Link key={ind} href={`/patients/${patient.id}`}>
-								<div className="flex p-3 bg-blue-100 rounded-md">
-									<p className="w-24">{ind + 1}</p>
-									<p className="w-full">{`${patient.firstName} ${patient.middleName} ${patient.lastName}`}</p>
-									<p className="w-1/3 text-center">
-										{patient.sex}
-									</p>
-									<p className="w-1/3 text-center">
-										{new Date().getFullYear() -
-											new Date(
-												patient.birthDate
-											).getFullYear()}
-									</p>
-								</div>
-							</Link>
+							<div
+								className="flex p-3 bg-blue-100 rounded-md cursor-pointer"
+								key={patient.id}
+								onClick={() => selectPatient(patient)}
+							>
+								<p className="w-24">{ind + 1}</p>
+								<p className="w-full">{`${patient.firstName} ${patient.middleName} ${patient.lastName}`}</p>
+								<p className="w-1/3 text-center">
+									{patient.sex}
+								</p>
+								<p className="w-1/3 text-center">
+									{new Date().getFullYear() -
+										new Date(
+											patient.birthDate
+										).getFullYear()}
+								</p>
+							</div>
 						);
 					})}
 				</div>

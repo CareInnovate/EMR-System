@@ -4,9 +4,10 @@ import { useEffect, useRef } from "react";
 
 type props = {
 	isOpen: boolean;
+	fullWidth?: true;
 	children: any;
 };
-const Popup = ({ isOpen, children }: props) => {
+const Popup = ({ isOpen, fullWidth, children }: props) => {
 	const modalRef = useRef<HTMLDialogElement | null>(null);
 
 	useEffect(() => {
@@ -22,7 +23,9 @@ const Popup = ({ isOpen, children }: props) => {
 	return (
 		<dialog
 			ref={modalRef}
-			className="backdrop:bg-gray-400 z-40 w-full md:w-1/2 min-w-48 md:min-w-96 min-h-96 backdrop:opacity-40 rounded-xl h-fit"
+			className={`backdrop:bg-gray-400 z-40 w-full ${
+				fullWidth ? "md:w-3/5" : "md:w-1/2"
+			} min-w-48 md:min-w-96 min-h-96 backdrop:opacity-40 rounded-xl h-fit`}
 		>
 			{children}
 		</dialog>
