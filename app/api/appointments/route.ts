@@ -19,6 +19,7 @@ export async function GET() {
 								select: {
 									firstName: true,
 									middleName: true,
+									department: true,
 								},
 							},
 						},
@@ -74,6 +75,7 @@ export type patientAppointment = Prisma.AppointmentGetPayload<{
 					select: {
 						firstName: true;
 						middleName: true;
+						department: true;
 					};
 				};
 			};

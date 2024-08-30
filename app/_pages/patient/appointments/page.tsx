@@ -1,4 +1,5 @@
 "use client";
+import AppointmentForm from "@/app/_components/AppointmentForm";
 import Popup from "@/app/_components/Popup";
 import { useAppointment } from "@/app/_hooks/useAppointment";
 import { useConfirm } from "@/app/_hooks/useConfirm";
@@ -11,82 +12,79 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Department } from "@prisma/client";
-import { ChangeEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
+
+enum PopupTypes {
+	Update,
+	Create,
+	None,
+}
+
 type props = {
 	initialAppointments: patientAppointment[];
 	departments: Department[];
 	patientId: string;
 };
+
 export default function PatientAppointments({
 	initialAppointments,
 	departments,
 	patientId,
 }: props) {
-	const [popup, setPopup] = useState<boolean>(false);
+	const [popup, setPopup] = useState<PopupTypes>(PopupTypes.None);
 	const [error, setError] = useState<string>();
 	const [appointments, setAppointments] = useAppointment(initialAppointments);
 	const { open, confirm, handleCancel, handleConfirm } = useConfirm();
 	const [timeSlots, setTimeSlots] = useState<Record<string, number>>();
+	const [edit, setEdit] = useState<{
+		appId: string;
+		dept?: string;
+		datetime?: Date;
+	}>();
 	const form = useRef<HTMLFormElement>(null);
-	const timeOptions =
-		timeSlots &&
-		Object.entries(timeSlots)
-			.filter((slot) => slot[1] > 0)
-			.map((slot, ind) => {
-				return (
-					<option key={ind} value={slot[0]}>
-						{slot[0]}
-					</option>
-				);
-			});
-	const selectedDept = useRef<HTMLSelectElement>(null);
-
-	async function fetchTimeSlots(e: ChangeEvent<HTMLInputElement>) {
-		const date = new Date(e.currentTarget.value);
-		const searchParams = new URLSearchParams({ date: date.toISOString() });
-
-		const res = await fetch(
-			`http://localhost:3000/api/appointments/${
-				selectedDept.current?.value
-			}?${searchParams.toString()}`
-		);
-		const data = await res.json();
-
-		setTimeSlots(data);
-	}
-	async function handleSave() {
+	async function handleSubmit() {
 		if (form.current === null) {
 			return "Error";
 		}
 		const formData = new FormData(form.current);
 		const date = formData.get("date") as string;
 		const time = formData.get("time") as string;
+		const body = {
+			date: new Date(`${date}T${time}`),
+			patientId: patientId,
+			appointmentId: edit?.appId,
+		};
 		const res = await fetch(
 			`http://localhost:3000/api/appointments/${formData.get(
 				"department"
 			)}`,
 			{
-				method: "POST",
-				body: JSON.stringify({
-					date: new Date(`${date}T${time}`),
-					patientId: patientId,
-				}),
+				method: popup === PopupTypes.Create ? "POST" : "PUT",
+				body: JSON.stringify(body),
 			}
 		);
 		const data: patientAppointment | { error: string } = await res.json();
 		if (isAppointment(data)) {
-			setAppointments((prev) => [...prev, data]);
-			setPopup(false);
+			if (popup === PopupTypes.Create) {
+				setAppointments((prev) => [...prev, data]);
+			} else {
+				setAppointments((prev) => [
+					...prev.filter((val) => val.id !== data.id),
+					data,
+				]);
+			}
+			setPopup(PopupTypes.None);
 		} else {
 			setError(data.error);
 		}
 		setTimeSlots({});
+		setEdit(undefined);
 		form.current.reset();
 	}
 	return (
 		<main className="w-full mt-24 flex flex-col items-center gap-3 py-1 px-9 sm:px-5">
 			{
-				<Popup isOpen={popup}>
+				<Popup isOpen={popup !== PopupTypes.None}>
 					<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-between gap-5 text-center">
 						{error && (
 							<div className="absolute top-0 left-0 w-full py-2 px-4 bg-red-300 rounded-t-md flex justify-between items-center">
@@ -100,86 +98,29 @@ export default function PatientAppointments({
 								/>
 							</div>
 						)}
-						<form
-							className="grid grid-cols-2 gap-4 w-full"
-							ref={form}
-						>
-							<h1 className="col-span-2 text-left font-bold text-2xl">
-								Schedule your appointment
-							</h1>
-							<input
-								type="text"
-								name="type"
-								id="type"
-								value={"Consultation"}
-								hidden
-							/>
-							<input
-								type="text"
-								name="status"
-								id="status"
-								value={"Scheduled"}
-								hidden
-							/>
-							<label className="flex flex-col gap-2 w-full">
-								<span className="p-2 w-full text-left text-xl">
-									Department:
-								</span>
-								<select
-									name="department"
-									id="department"
-									className="ml-2 p-2 w-4/5 border border-gray-300 rounded-md"
-									ref={selectedDept}
-								>
-									<option disabled>Choose department</option>
-									{departments.map((dep) => (
-										<option key={dep.id} value={dep.id}>
-											{dep.name}
-										</option>
-									))}
-								</select>
-							</label>
-							<label className="flex flex-col gap-2 w-full">
-								<span className="p-2 w-full text-left text-xl">
-									Date:
-								</span>
-								<input
-									className="ml-2 p-2 w-4/5 border border-gray-300 rounded-md"
-									type="date"
-									name="date"
-									id="date"
-									min={new Date().toISOString().split("T")[0]}
-									onInput={fetchTimeSlots}
-								/>
-							</label>
-							<label className="flex flex-col gap-2 w-full">
-								<span className="p-2 w-full text-left text-xl">
-									Time:
-								</span>
-								<select
-									className="ml-2 p-2 w-4/5 border border-gray-300 rounded-md"
-									name="time"
-									id="time"
-								>
-									<option disabled>Choose time:</option>
-									{timeOptions}
-								</select>
-							</label>
-						</form>
+						<AppointmentForm
+							departments={departments}
+							setTimeSlots={setTimeSlots}
+							timeSlots={timeSlots}
+							form={form}
+							defaultValue={edit}
+						/>
+
 						<div className="flex w-full justify-end gap-2">
 							<button
 								className="py-2 px-5 rounded-md text-xl border border-blue-950 text-blue-900"
 								onClick={() => {
 									form.current && form.current.reset();
+									setEdit(undefined);
 									setTimeSlots({});
-									setPopup(false);
+									setPopup(PopupTypes.None);
 								}}
 							>
 								Cancel
 							</button>
 							<button
 								className="py-2 px-5 rounded-md text-xl bg-blue-900 text-white"
-								onClick={handleSave}
+								onClick={handleSubmit}
 							>
 								Save
 							</button>
@@ -249,7 +190,16 @@ export default function PatientAppointments({
 									).toLocaleTimeString()}
 								</td>
 								<td className="text-center">
-									<button onClick={() => setPopup(true)}>
+									<button
+										onClick={() => {
+											setEdit({
+												appId: app.id,
+												dept: app.doctor.staff
+													.department?.id,
+											});
+											setPopup(PopupTypes.Update);
+										}}
+									>
 										<FontAwesomeIcon
 											icon={faEdit}
 											className="mr-4"
@@ -293,7 +243,7 @@ export default function PatientAppointments({
 			<div className="mt-8 w-3/4 flex justify-end mr-2">
 				<button
 					className="bg-blue-900 text-white px-3 py-2 rounded"
-					onClick={() => setPopup(true)}
+					onClick={() => setPopup(PopupTypes.Create)}
 				>
 					Schedule Appointment
 				</button>
