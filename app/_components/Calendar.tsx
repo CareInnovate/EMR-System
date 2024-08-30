@@ -14,12 +14,16 @@ export type event = {
 	start: Date;
 	end: Date;
 	title: string;
-	resourceId?: number;
-	data: { id: number };
+	resourceId?: string;
+	data: { id: string };
 };
 export type resource = {
-	id: number;
+	id: string;
 	title: string;
+};
+type props = {
+	resources: resource[];
+	initialEvents: event[];
 };
 
 //TODO: add Props to enter the doctors that the receptionist
@@ -27,35 +31,10 @@ export type resource = {
 
 //TODO: add a way to create and edit appointments by double clicking
 //on empty slots and submitting forms
-const Calendar = () => {
+const Calendar = ({ resources, initialEvents }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
-	const resources = [
-		{ id: 1, title: "Dr. John Smith" },
-		{ id: 2, title: "Dr. Anna Frank" },
-		{ id: 3, title: "Dr. Tom Cat" },
-	];
-	const [events, setEvents] = useState<event[]>([
-		//temporary demo data
-		{
-			start: moment("2024-08-18T11:00").toDate(),
-			end: moment("2024-08-18T11:30").toDate(),
-			title: "Hello there",
-			data: {
-				id: 1,
-			},
-			resourceId: 1,
-		},
-		{
-			start: moment("2024-08-18T11:00").toDate(),
-			end: moment("2024-08-18T12:00").toDate(),
-			title: "Hello World",
-			data: {
-				id: 2,
-			},
-			resourceId: 2,
-		},
-	]);
+	const [events, setEvents] = useState<event[]>(initialEvents);
 	const { message, currentEvent, handleDrop } = useCalendar(
 		setEvents,
 		resources,
