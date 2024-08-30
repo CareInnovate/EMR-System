@@ -55,6 +55,16 @@ export async function GET() {
 			);
 	}
 }
+export async function DELETE(req: NextRequest) {
+	const data: patientAppointment = await req.json();
+	const appointment = await prisma.appointment.delete({
+		where: {
+			id: data.id,
+		},
+	});
+	console.log(appointment);
+	return NextResponse.json(appointment);
+}
 
 export type patientAppointment = Prisma.AppointmentGetPayload<{
 	include: {
