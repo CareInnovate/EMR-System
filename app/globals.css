@@ -23,7 +23,7 @@ aside {
 	@apply hidden  !important;
 }
 .rbc-row.rbc-time-header-cell {
-	@apply flex-1 justify-center !important;
+	@apply w-full flex-1 justify-center !important;
 }
 .rbc-row.rbc-row-resource {
 	@apply border-none flex-1 items-center !important;
