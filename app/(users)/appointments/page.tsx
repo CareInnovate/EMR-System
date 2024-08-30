@@ -23,7 +23,7 @@ export default async function Appointments() {
 			).then((res) => res.json());
 			return (
 				<PatientAppointments
-					appointments={appointments}
+					initialAppointments={appointments}
 					departments={departments}
 					patientId={user.user.id}
 				/>

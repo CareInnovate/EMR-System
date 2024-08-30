@@ -1,5 +1,6 @@
 "use client";
 import Popup from "@/app/_components/Popup";
+import { useAppointment } from "@/app/_hooks/useAppointment";
 import { useConfirm } from "@/app/_hooks/useConfirm";
 import { patientAppointment } from "@/app/api/appointments/route";
 import {
@@ -12,17 +13,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Department } from "@prisma/client";
 import { ChangeEvent, useRef, useState } from "react";
 type props = {
-	appointments: patientAppointment[];
+	initialAppointments: patientAppointment[];
 	departments: Department[];
 	patientId: string;
 };
 export default function PatientAppointments({
-	appointments,
+	initialAppointments,
 	departments,
 	patientId,
 }: props) {
 	const [popup, setPopup] = useState<boolean>(false);
 	const [error, setError] = useState<string>();
+	const [appointments, setAppointments] = useAppointment(initialAppointments);
 	const { open, confirm, handleCancel, handleConfirm } = useConfirm();
 	const [timeSlots, setTimeSlots] = useState<Record<string, number>>();
 	const form = useRef<HTMLFormElement>(null);
@@ -73,7 +75,7 @@ export default function PatientAppointments({
 		);
 		const data: patientAppointment | { error: string } = await res.json();
 		if (isAppointment(data)) {
-			appointments.push(data);
+			setAppointments((prev) => [...prev, data]);
 			setPopup(false);
 		} else {
 			setError(data.error);
@@ -257,7 +259,23 @@ export default function PatientAppointments({
 										onClick={async () => {
 											const res = await confirm();
 											if (res) {
-												//some logic here
+												const removedApp: patientAppointment =
+													await fetch(
+														"http://localhost:3000/api/appointments",
+														{
+															method: "DELETE",
+															body: JSON.stringify(
+																app
+															),
+														}
+													).then((res) => res.json());
+												setAppointments((prev) =>
+													prev.filter(
+														(val) =>
+															val.id !==
+															removedApp.id
+													)
+												);
 											}
 										}}
 									>
