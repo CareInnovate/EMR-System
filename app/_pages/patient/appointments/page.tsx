@@ -255,7 +255,7 @@ export default function PatientAppointments({
 	);
 }
 
-const isAppointment = (
+export const isAppointment = (
 	x: patientAppointment | { error: string }
 ): x is patientAppointment => {
 	return (x as patientAppointment).id !== undefined;

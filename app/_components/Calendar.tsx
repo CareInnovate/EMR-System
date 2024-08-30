@@ -1,14 +1,18 @@
 "use client";
 import moment from "moment";
 import { useState } from "react";
-import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
+import {
+	Calendar as BigCalendar,
+	momentLocalizer,
+	SlotInfo,
+} from "react-big-calendar";
 import withDragandDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import Popup from "./Popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { useConfirm } from "../_hooks/useConfirm";
 import { useCalendar } from "../_hooks/useCalendar";
-import AppointmentForm from "./AppointmentForm";
+import ReceptionistAppointmentForm from "./ReceptionistAppointmentForm";
 
 const DnDCalendar = withDragandDrop<event>(BigCalendar);
 export type event = {
@@ -34,32 +38,7 @@ const Calendar = ({ resources, initialEvents }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 	const [events, setEvents] = useState<event[]>(initialEvents);
-	// const resources = [
-	// 	{ id: "1", title: "Dr. John Smith", deptId: "general-id" },
-	// 	{ id: "2", title: "Dr. Anna Frank", deptId: "general-id" },
-	// 	{ id: "3", title: "Dr. Tom Cat", deptId: "general-id" },
-	// ];
-	// const [events, setEvents] = useState<event[]>([
-	// 	//temporary demo data
-	// 	{
-	// 		start: moment("2024-08-30T11:00").toDate(),
-	// 		end: moment("2024-08-30T11:30").toDate(),
-	// 		title: "Hello there",
-	// 		data: {
-	// 			id: "1",
-	// 		},
-	// 		resourceId: "1",
-	// 	},
-	// 	{
-	// 		start: moment("2024-08-30T11:00").toDate(),
-	// 		end: moment("2024-08-30T12:00").toDate(),
-	// 		title: "Hello World",
-	// 		data: {
-	// 			id: "2",
-	// 		},
-	// 		resourceId: "2",
-	// 	},
-	// ]);
+
 	const { message, currentEvent, handleDrop } = useCalendar(
 		setEvents,
 		resources,
@@ -93,6 +72,8 @@ const Calendar = ({ resources, initialEvents }: props) => {
 					</div>
 				</div>
 			</Popup>
+			<ReceptionistAppointmentForm setEvents={setEvents} />
+
 			<DnDCalendar
 				localizer={localizer}
 				events={events}
@@ -100,7 +81,11 @@ const Calendar = ({ resources, initialEvents }: props) => {
 				views={["day", "week", "agenda"]}
 				defaultView="day"
 				onEventDrop={handleDrop}
-				onEventResize={handleDrop}
+				resizable={false}
+				onSelectSlot={(slotInfo: SlotInfo) =>
+					console.log("selected here", slotInfo)
+				}
+				selectable={true}
 				onDragStart={({ event }) => {
 					currentEvent.current = event;
 				}}
