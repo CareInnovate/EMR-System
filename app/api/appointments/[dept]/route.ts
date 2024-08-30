@@ -148,6 +148,35 @@ export async function POST(
 		);
 	}
 }
+export async function PUT(
+	req: NextRequest,
+	{ params }: { params: { dept: string } }
+) {
+	const data: { date: string; patientId: string; appointmentId: string } =
+		await req.json();
+	const date = new Date(data.date);
+	const appointment = await prisma.appointment.update({
+		where: {
+			id: data.appointmentId,
+		},
+		data: {
+			datetime: date,
+		},
+		include: {
+			doctor: {
+				select: {
+					staff: {
+						select: {
+							firstName: true,
+							middleName: true,
+						},
+					},
+				},
+			},
+		},
+	});
+	return NextResponse.json(appointment);
+}
 function initializeSlots(): Record<string, number> {
 	const slots: Record<string, number> = {};
 	const startHour = 9; // 9:00 AM
