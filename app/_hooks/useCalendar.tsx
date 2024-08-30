@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { EventInteractionArgs } from "react-big-calendar/lib/addons/dragAndDrop";
 import { event, resource } from "@/app/_components/Calendar";
+import { patientAppointment } from "../api/appointments/route";
 export const useCalendar = (
 	setEvents: Dispatch<SetStateAction<event[]>>,
 	resources: resource[],
@@ -24,7 +25,6 @@ export const useCalendar = (
 			let doctorChange = <span></span>;
 			if (
 				currentEvent.current?.resourceId &&
-				typeof resourceId === "number" &&
 				currentEvent.current?.resourceId !== resourceId
 			) {
 				const doctors = resources.reduce<{ prev: string; cur: string }>(
@@ -60,14 +60,25 @@ export const useCalendar = (
 			);
 			const ans = await confirm();
 			if (ans) {
+				const newAppointment: patientAppointment = await fetch(
+					`http://localhost:3000/api/appointments/${resources[0].deptId}`,
+					{
+						method: "PUT",
+						body: JSON.stringify({
+							date: start as Date,
+							appointmentId: event.data.id,
+							doctorId: resourceId as string,
+						}),
+					}
+				).then((res) => res.json());
 				setEvents((prevEvents) =>
 					prevEvents.map((prevEvent) =>
-						prevEvent.data.id === event?.data?.id
+						prevEvent.data.id === newAppointment.id
 							? {
 									...prevEvent,
 									start: start as Date,
 									end: end as Date,
-									resourceId: resourceId as number,
+									resourceId: resourceId as string,
 							  }
 							: prevEvent
 					)

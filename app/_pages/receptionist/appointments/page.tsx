@@ -6,13 +6,15 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 export async function ReceptionistAppointments() {
 	const user = await getServerSession(options);
+	const deptId = "general-id";
 	const doctors: doctor[] = await fetch(
-		"http://localhost:3000/api/doctors/general-id"
+		`http://localhost:3000/api/doctors/${deptId}`
 	).then((res) => res.json());
 	console.log(doctors[0].appointments);
 	const resources = doctors.map((doctor) => ({
 		id: doctor.id,
 		title: `Dr. ${doctor.staff.firstName} ${doctor.staff.middleName}`,
+		deptId: deptId,
 	}));
 	const events = doctors.flatMap((doctor) => {
 		return doctor.appointments.map((app) => {
@@ -26,7 +28,7 @@ export async function ReceptionistAppointments() {
 				end: endTime,
 				title: title,
 				data: {
-					id: doctor.id,
+					id: app.id,
 				},
 				resourceId: doctor.id,
 			};
