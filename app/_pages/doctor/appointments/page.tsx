@@ -1,36 +1,39 @@
-import Calendar from "@/app/_components/Calendar";
+import Calendar, { event, resource } from "@/app/_components/Calendar";
+import { doctorAppointment } from "@/app/api/appointments/route";
 import { options } from "@/app/api/auth/[...nextauth]/options";
-import { doctor } from "@/app/api/doctors/[dept]/route";
 import { getServerSession } from "next-auth";
+import { headers } from "next/headers";
 
 const DoctorAppointments = async () => {
 	const user = await getServerSession(options);
-	const deptId = user?.user.deptId as string;
-	const doctors: doctor[] = await fetch(
-		`http://localhost:3000/api/doctors/${deptId}`
+	const appointments: doctorAppointment[] = await fetch(
+		`http://localhost:3000/api/appointments/`,
+		{
+			headers: headers(),
+		}
 	).then((res) => res.json());
-	const resources = doctors.map((doctor) => ({
-		id: doctor.id,
-		title: `Dr. ${doctor.staff.firstName} ${doctor.staff.middleName}`,
-		deptId: deptId,
-	}));
-	const events = doctors.flatMap((doctor) => {
-		return doctor.appointments.map((app) => {
-			const startTime = new Date(app.datetime);
-			const endTime = new Date(startTime.getTime() + 30 * 60000);
-			const title = `${app.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."} ${
-				app.patient.firstName
-			} ${app.patient.middleName} ${app.patient.lastName}`;
-			return {
-				start: startTime,
-				end: endTime,
-				title: title,
-				data: {
-					id: app.id,
-				},
-				resourceId: doctor.id,
-			};
-		});
+	const resources: resource[] = [
+		{
+			id: user?.user.id as string,
+			title: `Dr. ${user?.user.name}`,
+			deptId: user?.user.deptId as string,
+		},
+	];
+	const events: event[] = appointments.map((app) => {
+		const startTime = new Date(app.datetime);
+		const endTime = new Date(startTime.getTime() + 30 * 60000);
+		const title = `${app.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."} ${
+			app.patient.firstName
+		} ${app.patient.middleName} ${app.patient.lastName}`;
+		return {
+			start: startTime,
+			end: endTime,
+			title: title,
+			data: {
+				id: app.id,
+			},
+			resourceId: user?.user.id as string,
+		};
 	});
 
 	return (
