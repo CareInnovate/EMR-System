@@ -1,3 +1,4 @@
+import DoctorAppointments from "@/app/_pages/doctor/appointments/page";
 import PatientAppointments from "@/app/_pages/patient/appointments/page";
 import { ReceptionistAppointments } from "@/app/_pages/receptionist/appointments/page";
 import Unauthorized from "@/app/_pages/Unauthorized";
@@ -29,7 +30,7 @@ export default async function Appointments() {
 				/>
 			);
 		case "Doctor":
-			return;
+			return <DoctorAppointments />;
 		case "Receptionist":
 			return <ReceptionistAppointments />;
 		default:

@@ -2,9 +2,8 @@ import Calendar from "@/app/_components/Calendar";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { doctor } from "@/app/api/doctors/[dept]/route";
 import { getServerSession } from "next-auth";
-import "react-big-calendar/lib/css/react-big-calendar.css";
 
-export async function ReceptionistAppointments() {
+const DoctorAppointments = async () => {
 	const user = await getServerSession(options);
 	const deptId = user?.user.deptId as string;
 	const doctors: doctor[] = await fetch(
@@ -39,4 +38,6 @@ export async function ReceptionistAppointments() {
 			<Calendar resources={resources} initialEvents={events} />
 		</main>
 	);
-}
+};
+
+export default DoctorAppointments;
