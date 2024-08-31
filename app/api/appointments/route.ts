@@ -33,7 +33,7 @@ export async function GET() {
 		case "Doctor":
 			const docApp = await prisma.doctor.findUnique({
 				where: {
-					id: user.user.id,
+					staffId: user.user.id,
 				},
 				include: {
 					appointments: {
@@ -43,12 +43,14 @@ export async function GET() {
 									firstName: true,
 									middleName: true,
 									lastName: true,
+									sex: true,
 								},
 							},
 						},
 					},
 				},
 			});
+			console.log(docApp);
 			return NextResponse.json(docApp?.appointments);
 		default:
 			return NextResponse.json(
@@ -84,14 +86,12 @@ export type patientAppointment = Prisma.AppointmentGetPayload<{
 }>;
 export type doctorAppointment = Prisma.AppointmentGetPayload<{
 	include: {
-		doctor: {
+		patient: {
 			select: {
-				staff: {
-					select: {
-						firstName: true;
-						middleName: true;
-					};
-				};
+				firstName: true;
+				middleName: true;
+				lastName: true;
+				sex: true;
 			};
 		};
 	};
