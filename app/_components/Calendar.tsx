@@ -37,6 +37,7 @@ type props = {
 const Calendar = ({ resources, initialEvents }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
+	const [popup, setPopup] = useState<boolean>(false);
 	const [events, setEvents] = useState<event[]>(initialEvents);
 
 	const { message, currentEvent, handleDrop } = useCalendar(
@@ -72,7 +73,11 @@ const Calendar = ({ resources, initialEvents }: props) => {
 					</div>
 				</div>
 			</Popup>
-			<ReceptionistAppointmentForm setEvents={setEvents} />
+			<ReceptionistAppointmentForm
+				setEvents={setEvents}
+				popup={popup}
+				setPopup={setPopup}
+			/>
 
 			<DnDCalendar
 				localizer={localizer}
@@ -82,9 +87,7 @@ const Calendar = ({ resources, initialEvents }: props) => {
 				defaultView="day"
 				onEventDrop={handleDrop}
 				resizable={false}
-				onSelectSlot={(slotInfo: SlotInfo) =>
-					console.log("selected here", slotInfo)
-				}
+				onSelectSlot={(slotInfo: SlotInfo) => setPopup(true)}
 				selectable={true}
 				onDragStart={({ event }) => {
 					currentEvent.current = event;

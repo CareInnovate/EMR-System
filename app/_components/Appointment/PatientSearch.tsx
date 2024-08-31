@@ -34,7 +34,7 @@ export default function PatientSearch({
 	}
 
 	return (
-		<main className="flex flex-col p-6 w-full mx-auto my-auto gap-6 h-5/6">
+		<main className="flex flex-col p-6 w-full mx-auto gap-6 h-5/6">
 			<form
 				className="bg-white p-6 rounded-md text-xl border border-gray-400 flex flex-col gap-4 w-full"
 				onSubmit={handleSubmit}

@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import Popup from "./Popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faClose } from "@fortawesome/free-solid-svg-icons";
 import AppointmentForm from "./AppointmentForm";
 import { useConfirm } from "../_hooks/useConfirm";
 import PatientSearch from "./Appointment/PatientSearch";
@@ -10,73 +10,88 @@ import { patientAppointment } from "../api/appointments/route";
 import { isAppointment } from "../_pages/patient/appointments/page";
 import { event } from "./Calendar";
 
-const ReceptionistAppointmentForm = ({
-	setEvents,
-}: {
+type props = {
 	setEvents: Dispatch<SetStateAction<event[]>>;
-}) => {
+	popup: boolean;
+	setPopup: Dispatch<SetStateAction<boolean>>;
+};
+const ReceptionistAppointmentForm = ({ setEvents, popup, setPopup }: props) => {
 	const { open, confirm, handleCancel, handleConfirm } = useConfirm();
-	const [popup, setPopup] = useState<boolean>(true);
 	const [error, setError] = useState<string>();
 	const [timeSlots, setTimeSlots] = useState<Record<string, number>>();
 	const form = useRef<HTMLFormElement>(null);
 	return (
 		<>
-			<Popup isOpen={popup} fullWidth={true}>
-				<PatientSearch
-					selectPatient={async (patient: Patient) => {
-						const res = await confirm();
-						console.log(res);
-						if (res) {
-							//TODO: make better error handling
-							if (form.current === null) {
-								return "Error";
-							}
-							const formData = new FormData(form.current);
-							const date = formData.get("date") as string;
-							const time = formData.get("time") as string;
-							const body = {
-								date: new Date(`${date}T${time}`),
-								patientId: patient.id,
-							};
-							const res = await fetch(
-								`http://localhost:3000/api/appointments/${formData.get(
-									"department"
-								)}`,
-								{
-									method: "POST",
-									body: JSON.stringify(body),
+			<Popup
+				isOpen={popup}
+				fullWidth={true}
+				noMinHeight={true}
+				setOpen={setPopup}
+			>
+				<div className="flex flex-col w-full relative pt-7">
+					<div className="w-full flex justify-end py-4 px-5 text-2xl absolute right-0 top-0">
+						<FontAwesomeIcon
+							icon={faCircleXmark}
+							onClick={() => setPopup(false)}
+							className="cursor-pointer text-blue-950"
+						/>
+					</div>
+					<PatientSearch
+						selectPatient={async (patient: Patient) => {
+							const res = await confirm();
+							console.log(res);
+							if (res) {
+								//TODO: make better error handling
+								if (form.current === null) {
+									return "Error";
 								}
-							);
-							const data: patientAppointment | { error: string } =
-								await res.json();
-							if (isAppointment(data)) {
-								const newEvent: event = {
-									data: { id: data.id },
-									start: new Date(data.datetime),
-									end: new Date(
-										new Date(data.datetime).getTime() +
-											30 * 60000
-									),
-									title: `${
-										patient.sex === "MALE"
-											? "Mr."
-											: "Mrs./Ms."
-									} ${patient.firstName} ${
-										patient.middleName
-									} ${patient.lastName}`,
-									resourceId: data.doctorId,
+								const formData = new FormData(form.current);
+								const date = formData.get("date") as string;
+								const time = formData.get("time") as string;
+								const body = {
+									date: new Date(`${date}T${time}`),
+									patientId: patient.id,
 								};
-								setEvents((prev) => [...prev, newEvent]);
-								setPopup(false);
-							} else {
-								setError(data.error);
+								const res = await fetch(
+									`http://localhost:3000/api/appointments/${formData.get(
+										"department"
+									)}`,
+									{
+										method: "POST",
+										body: JSON.stringify(body),
+									}
+								);
+								const data:
+									| patientAppointment
+									| { error: string } = await res.json();
+								if (isAppointment(data)) {
+									const newEvent: event = {
+										data: { id: data.id },
+										start: new Date(data.datetime),
+										end: new Date(
+											new Date(data.datetime).getTime() +
+												30 * 60000
+										),
+										title: `${
+											patient.sex === "MALE"
+												? "Mr."
+												: "Mrs./Ms."
+										} ${patient.firstName} ${
+											patient.middleName
+										} ${patient.lastName}`,
+										resourceId: data.doctorId,
+									};
+									setEvents((prev) => [...prev, newEvent]);
+									setPopup(false);
+								} else {
+									setError(data.error);
+								}
+								setTimeSlots({});
+								form.current.reset();
 							}
-							setTimeSlots({});
-							form.current.reset();
-						}
-					}}
-				/>
+						}}
+					/>
+				</div>
 			</Popup>
 			<Popup isOpen={open}>
 				<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-between gap-5 text-center">
