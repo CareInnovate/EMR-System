@@ -27,6 +27,9 @@ const Prescription = ({ data, setData }: props) => {
 	];
 	const durations = ["5 days", "1 week", "2 weeks"];
 	function handleSave() {
+		if (medication === undefined) {
+			return setError("You didn't select a medication");
+		}
 		if (dosage === -1) {
 			setError("You must select a dosage");
 		} else if (duration === -1) {

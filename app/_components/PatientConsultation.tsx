@@ -11,8 +11,9 @@ import { SessionProvider } from "next-auth/react";
 import { useConfirm } from "../_hooks/useConfirm";
 import Popup from "./Popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faWarning } from "@fortawesome/free-solid-svg-icons";
+import { faWarning, faXmarkCircle } from "@fortawesome/free-solid-svg-icons";
 import { Medication } from "@prisma/client";
+import { useRouter } from "next/navigation";
 export type examinationData = {
 	vitals?: {
 		temperature?: number;
@@ -24,7 +25,7 @@ export type examinationData = {
 	lgs?: string;
 };
 export type prescriptionData = {
-	medication?: Medication;
+	medication: Medication;
 	dosage: string;
 	duration: string;
 	quantity: number;
@@ -39,11 +40,15 @@ export type consultationData = {
 const PatientConsultation = ({
 	patientId,
 	doctorId,
+	appointmentId,
 }: {
 	patientId: string;
 	doctorId: string;
+	appointmentId: string;
 }) => {
 	const [consulting, setConsulting] = useState<boolean>(false);
+	const [error, setError] = useState<string>("");
+	const router = useRouter();
 	const [data, setData] = useState<consultationData>({
 		symptoms: new Set(),
 		examination: {},
@@ -53,14 +58,23 @@ const PatientConsultation = ({
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 
 	async function handleSave() {
-		await fetch("http://localhost:3000/api/medicalRecord", {
+		const res = await fetch("http://localhost:3000/api/medicalRecord", {
 			method: "POST",
 			body: JSON.stringify({
 				patientId: patientId,
 				doctorId: doctorId,
+				appointmentId: appointmentId,
 				data: data,
 			}),
 		});
+		const apiData = await res.json();
+		if (!res.ok) {
+			console.log("been here");
+			setError(apiData.message);
+			return;
+		}
+		setConsulting(false);
+		router.refresh();
 	}
 	async function handleClick() {
 		let confirmed = true;
@@ -129,6 +143,23 @@ const PatientConsultation = ({
 					{consulting ? "Stop" : "Start"} Consultation
 				</button>
 			</div>
+			{error && (
+				<Popup isOpen={true}>
+					<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-around gap-5 text-center">
+						<FontAwesomeIcon
+							icon={faXmarkCircle}
+							className="text-7xl text-red-600"
+						/>
+						<p className="text-gray-600 text-xl">{error}</p>
+						<button
+							className="py-2 px-5 rounded-md text-xl bg-red-200"
+							onClick={() => setError("")}
+						>
+							Close
+						</button>
+					</div>
+				</Popup>
+			)}
 			{consulting && (
 				<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4 min-h-[550px] overflow-scroll h-fit">
 					<Tabs selectedTabClassName="bg-blue-700 text-white rounded-t-lg">

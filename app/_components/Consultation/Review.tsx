@@ -9,8 +9,6 @@ const Review = ({
 	data: consultationData;
 	handleSave: MouseEventHandler<HTMLButtonElement>;
 }) => {
-	const doctor = useSession();
-
 	const patientSymptoms = Array.from(data.symptoms).map((symptom, ind) => {
 		return (
 			<div

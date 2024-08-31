@@ -5,14 +5,21 @@ import { getServerSession } from "next-auth";
 
 export default async function PatientPage({
 	params,
+	searchParams,
 }: {
 	params: { id: string };
+	searchParams?: { appId: string };
 }) {
 	const user = await getServerSession(options);
 
 	switch (user?.user.role) {
 		case "Doctor":
-			return <DoctorTreatmentPage params={params} />;
+			return (
+				<DoctorTreatmentPage
+					params={params}
+					appointmentId={searchParams?.appId}
+				/>
+			);
 		default:
 			return <Unauthorized />;
 	}
