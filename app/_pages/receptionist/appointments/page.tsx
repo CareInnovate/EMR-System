@@ -10,7 +10,6 @@ export async function ReceptionistAppointments() {
 	const doctors: doctor[] = await fetch(
 		`http://localhost:3000/api/doctors/${deptId}`
 	).then((res) => res.json());
-	console.log(doctors[0].appointments);
 	const resources = doctors.map((doctor) => ({
 		id: doctor.id,
 		title: `Dr. ${doctor.staff.firstName} ${doctor.staff.middleName}`,

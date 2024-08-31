@@ -63,13 +63,6 @@ const AppointmentForm = ({
 			<h1 className="col-span-2 text-left font-bold text-2xl">
 				Schedule your appointment
 			</h1>
-			<input
-				type="text"
-				name="type"
-				id="type"
-				value={"Consultation"}
-				hidden
-			/>
 			<label className="flex flex-col gap-2 w-full">
 				<span className="p-2 w-full text-left text-xl">
 					Department:
