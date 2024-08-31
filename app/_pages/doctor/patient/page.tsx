@@ -7,10 +7,12 @@ import { Fragment } from "react";
 
 export default async function DoctorTreatmentPage({
 	params,
+	appointmentId,
 }: {
 	params: {
 		id: string;
 	};
+	appointmentId?: string;
 }) {
 	const res = await fetch(`http://localhost:3000/api/patient/${params.id}`, {
 		cache: "no-cache",
@@ -18,7 +20,6 @@ export default async function DoctorTreatmentPage({
 	const patient: patient = await res.json();
 	const patientMedicalRecords = patient.medicalRecords.map((record, ind) => {
 		const doctor = record.appointment.doctor.staff;
-		console.log(record.diagnosis);
 		return (
 			<Fragment key={ind}>
 				{record.diagnosis.map((diag, i) => {
@@ -46,10 +47,13 @@ export default async function DoctorTreatmentPage({
 	return (
 		<main className="w-3/4 mt-24 flex flex-col mx-auto gap-5 h-3/4 sm:text-lg text-sm">
 			<PatientDetails patient={patient} />
-			<PatientConsultation
-				patientId={params.id}
-				doctorId={doctor?.user.id as string}
-			/>
+			{appointmentId && (
+				<PatientConsultation
+					patientId={params.id}
+					doctorId={doctor?.user.id as string}
+					appointmentId={appointmentId}
+				/>
+			)}
 
 			<div className="rounded-3xl w-full p-5 border-2 border-blue-700 flex flex-col gap-4">
 				<h1 className="text-lg sm:text-2xl font-bold">

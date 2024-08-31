@@ -15,7 +15,7 @@ const DoctorAppointments = async () => {
 	const resources: resource[] = [
 		{
 			id: user?.user.id as string,
-			title: `Dr. ${user?.user.name}`,
+			title: `Your appointments`,
 			deptId: user?.user.deptId as string,
 		},
 	];
@@ -31,6 +31,7 @@ const DoctorAppointments = async () => {
 			title: title,
 			data: {
 				id: app.id,
+				patientId: app.patientId,
 			},
 			resourceId: user?.user.id as string,
 		};

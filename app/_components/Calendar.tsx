@@ -1,11 +1,7 @@
 "use client";
 import moment from "moment";
 import { useState } from "react";
-import {
-	Calendar as BigCalendar,
-	momentLocalizer,
-	SlotInfo,
-} from "react-big-calendar";
+import { Calendar as BigCalendar, momentLocalizer } from "react-big-calendar";
 import withDragandDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import Popup from "./Popup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +9,7 @@ import { faWarning } from "@fortawesome/free-solid-svg-icons";
 import { useConfirm } from "../_hooks/useConfirm";
 import { useCalendar } from "../_hooks/useCalendar";
 import ReceptionistAppointmentForm from "./ReceptionistAppointmentForm";
+import { useRouter } from "next/navigation";
 
 const DnDCalendar = withDragandDrop<event>(BigCalendar);
 export type event = {
@@ -20,7 +17,7 @@ export type event = {
 	end: Date;
 	title: string;
 	resourceId?: string;
-	data: { id: string };
+	data: { id: string; patientId?: string };
 };
 export type resource = {
 	id: string;
@@ -39,6 +36,7 @@ const Calendar = ({ resources, initialEvents }: props) => {
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 	const [popup, setPopup] = useState<boolean>(false);
 	const [events, setEvents] = useState<event[]>(initialEvents);
+	const router = useRouter();
 
 	const { message, currentEvent, handleDrop } = useCalendar(
 		setEvents,
@@ -87,7 +85,19 @@ const Calendar = ({ resources, initialEvents }: props) => {
 				defaultView="day"
 				onEventDrop={handleDrop}
 				resizable={false}
-				onSelectSlot={(slotInfo: SlotInfo) => setPopup(true)}
+				onSelectSlot={() => setPopup(true)}
+				onSelectEvent={(event: event) => {
+					if (event.data.patientId) {
+						const searchParams = new URLSearchParams({
+							appId: event.data.id,
+						});
+						router.push(
+							`http://localhost:3000/patients/${
+								event.data.patientId
+							}?${searchParams.toString()}`
+						);
+					}
+				}}
 				selectable={true}
 				onDragStart={({ event }) => {
 					currentEvent.current = event;
