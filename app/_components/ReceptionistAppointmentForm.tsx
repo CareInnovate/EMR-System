@@ -31,9 +31,9 @@ const ReceptionistAppointmentForm = ({ setEvents, popup, setPopup }: props) => {
 				<div className="flex flex-col w-full relative pt-7">
 					<div className="w-full flex justify-end py-4 px-5 text-2xl absolute right-0 top-0">
 						<FontAwesomeIcon
-							icon={faCircleXmark}
+							icon={faClose}
 							onClick={() => setPopup(false)}
-							className="cursor-pointer text-blue-950"
+							className="cursor-pointer text-blue-950 hover:text-blue-800"
 						/>
 					</div>
 					<PatientSearch
