@@ -10,6 +10,7 @@ import { useConfirm } from "../_hooks/useConfirm";
 import { useCalendar } from "../_hooks/useCalendar";
 import ReceptionistAppointmentForm from "./ReceptionistAppointmentForm";
 import { useRouter } from "next/navigation";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const DnDCalendar = withDragandDrop<event>(BigCalendar);
 export type event = {
@@ -27,11 +28,12 @@ export type resource = {
 type props = {
 	resources: resource[];
 	initialEvents: event[];
+	fullWidth?: boolean;
 };
 
 //TODO: add a way to create and edit appointments by double clicking
 //on empty slots and submitting forms
-const Calendar = ({ resources, initialEvents }: props) => {
+const Calendar = ({ resources, initialEvents, fullWidth }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 	const [popup, setPopup] = useState<boolean>(false);
@@ -45,7 +47,11 @@ const Calendar = ({ resources, initialEvents }: props) => {
 	);
 
 	return (
-		<div className="h-full w-5/6 flex justify-center">
+		<div
+			className={`h-full ${
+				fullWidth ? "w-full" : "w-5/6"
+			} flex justify-center`}
+		>
 			<Popup isOpen={open}>
 				<div className="flex flex-col p-10 m-auto absolute inset-0 bg-white items-center justify-around gap-5 text-center">
 					<FontAwesomeIcon
