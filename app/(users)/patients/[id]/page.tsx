@@ -16,7 +16,7 @@ export default async function PatientPage({
 		case "Doctor":
 			return (
 				<DoctorTreatmentPage
-					params={params}
+					patientId={params.id}
 					appointmentId={searchParams?.appId}
 				/>
 			);
