@@ -288,108 +288,6 @@ async function main() {
 			},
 		],
 	});
-
-	await prisma.invoice.createMany({
-		data: [
-			{
-				id: "invoice-1",
-				status: "Unpaid",
-				createdAt: "2024-08-11T14:14:01.513Z",
-				updatedAt: "2024-08-11T14:14:01.513Z",
-				patientId: "patient-1",
-			},
-			{
-				id: "invoice-2",
-				status: "Paid",
-				createdAt: "2024-08-11T14:14:01.535Z",
-				updatedAt: "2024-08-11T14:14:01.535Z",
-				patientId: "patient-2",
-			},
-		],
-	});
-	await prisma.invoice_Medication.createMany({
-		data: [
-			{
-				id: "9e93d299-0b09-412e-b271-c02b4813dbab",
-				quantity: 2,
-				invoiceId: "invoice-1",
-				medicationId: "med-1",
-			},
-			{
-				id: "7a6ecd81-f7d2-427e-99fa-87a61ddbdf8e",
-				quantity: 1,
-				invoiceId: "invoice-2",
-				medicationId: "med-3",
-			},
-		],
-	});
-	await prisma.patientRecord.createMany({
-		data: [
-			{
-				id: "22abb26b-9361-4e0b-b16c-7f91cf333818",
-				patientType: "Out",
-				patientCondition: "Mild",
-				allergies: ["Peanuts"],
-				familyHistory: "myopia",
-				height: 184,
-				weight: 55,
-				bloodPressure: "120/80",
-				temperature: null,
-				bloodType: "B+",
-				patientId: "9206f122-5800-4126-a557-dbbfc4b03ea0",
-			},
-		],
-	});
-
-	await prisma.workingHours.createMany({
-		data: [
-			{
-				id: "thur-wh",
-				date: "Thursday",
-				from: 9,
-				to: 17,
-				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
-			},
-			{
-				id: "sat-wh",
-				date: "Saturday",
-				from: 9,
-				to: 17,
-				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
-			},
-			{
-				id: "fri-wh",
-				date: "Friday",
-				from: 9,
-				to: 17,
-				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
-			},
-		],
-	});
-
-	await prisma.service.createMany({
-		data: [
-			{
-				id: "service-1",
-				name: "Consultation",
-				description: "Service provided by doctor to patient",
-				price: 200,
-			},
-			{
-				id: "service-2",
-				name: "Blood Test",
-				description: "Comprehensive blood test",
-				price: 30,
-			},
-			{
-				id: "service-3",
-				name: "X-Ray",
-				description: "Chest X-ray",
-				price: 75,
-			},
-		],
-	});
-
 	await prisma.diseases.createMany({
 		data: [
 			{ name: "Hypertension" },
@@ -949,6 +847,109 @@ async function main() {
 			},
 		],
 	});
+	
+	await prisma.invoice.createMany({
+		data: [
+			{
+				id: "invoice-1",
+				status: "Unpaid",
+				createdAt: "2024-08-11T14:14:01.513Z",
+				updatedAt: "2024-08-11T14:14:01.513Z",
+				patientId: "patient-1",
+			},
+			{
+				id: "invoice-2",
+				status: "Paid",
+				createdAt: "2024-08-11T14:14:01.535Z",
+				updatedAt: "2024-08-11T14:14:01.535Z",
+				patientId: "patient-2",
+			},
+		],
+	});
+	await prisma.invoice_Medication.createMany({
+		data: [
+			{
+				id: "9e93d299-0b09-412e-b271-c02b4813dbab",
+				quantity: 2,
+				invoiceId: "invoice-1",
+				medicationId: "med-1",
+			},
+			{
+				id: "7a6ecd81-f7d2-427e-99fa-87a61ddbdf8e",
+				quantity: 1,
+				invoiceId: "invoice-2",
+				medicationId: "med-3",
+			},
+		],
+	});
+	await prisma.patientRecord.createMany({
+		data: [
+			{
+				id: "22abb26b-9361-4e0b-b16c-7f91cf333818",
+				patientType: "Out",
+				patientCondition: "Mild",
+				allergies: ["Peanuts"],
+				familyHistory: "myopia",
+				height: 184,
+				weight: 55,
+				bloodPressure: "120/80",
+				temperature: null,
+				bloodType: "B+",
+				patientId: "9206f122-5800-4126-a557-dbbfc4b03ea0",
+			},
+		],
+	});
+
+	await prisma.workingHours.createMany({
+		data: [
+			{
+				id: "thur-wh",
+				date: "Thursday",
+				from: 9,
+				to: 17,
+				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
+			},
+			{
+				id: "sat-wh",
+				date: "Saturday",
+				from: 9,
+				to: 17,
+				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
+			},
+			{
+				id: "fri-wh",
+				date: "Friday",
+				from: 9,
+				to: 17,
+				doctorId: "84217cb9-4af4-4a92-941d-3d26fb64e2de",
+			},
+		],
+	});
+
+	await prisma.service.createMany({
+		data: [
+			{
+				id: "service-1",
+				name: "Consultation",
+				description: "Service provided by doctor to patient",
+				price: 200,
+			},
+			{
+				id: "service-2",
+				name: "Blood Test",
+				description: "Comprehensive blood test",
+				price: 30,
+			},
+			{
+				id: "service-3",
+				name: "X-Ray",
+				description: "Chest X-ray",
+				price: 75,
+			},
+		],
+	});
+
+	
 }
 
 main()
