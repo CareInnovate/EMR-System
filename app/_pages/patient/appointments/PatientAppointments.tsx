@@ -57,9 +57,9 @@ export default function PatientAppointments({
 			doctorId: edit?.docId,
 		};
 		const res = await fetch(
-			`http://localhost:3000/api/appointments/${formData.get(
-				"department"
-			)}`,
+			`https://${
+				process.env.NEXT_PUBLIC_VERCEL_URL
+			}/api/appointments/${formData.get("department")}`,
 			{
 				method: popup === PopupTypes.Create ? "POST" : "PUT",
 				body: JSON.stringify(body),
@@ -214,7 +214,7 @@ export default function PatientAppointments({
 											if (res) {
 												const removedApp: patientAppointment =
 													await fetch(
-														"http://localhost:3000/api/appointments",
+														`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments`,
 														{
 															method: "DELETE",
 															body: JSON.stringify(

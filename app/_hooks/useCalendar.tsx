@@ -61,7 +61,7 @@ export const useCalendar = (
 			const ans = await confirm();
 			if (ans) {
 				const newAppointment: patientAppointment = await fetch(
-					`http://localhost:3000/api/appointments/${resources[0].deptId}`,
+					`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments/${resources[0].deptId}`,
 					{
 						method: "PUT",
 						body: JSON.stringify({

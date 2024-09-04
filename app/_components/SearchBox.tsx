@@ -28,7 +28,9 @@ const SearchBox = ({
 				search: e.target.value,
 			});
 			const res = await fetch(
-				`http://localhost:3000/api/${fetchUrl}?${searchParams.toString()}`
+				`${
+					process.env.VERCEL_URL
+				}api/${fetchUrl}?${searchParams.toString()}`
 			);
 			const data = await res.json();
 			setOptions(data);

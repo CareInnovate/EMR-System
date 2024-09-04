@@ -14,7 +14,7 @@ const initialState = {
 	description: "",
 	error: false,
 };
-export function ReceptionistRegister() {
+export default function ReceptionistRegister() {
 	const [state, formAction, pending] = useFormState(
 		registerPatient,
 		initialState

@@ -12,9 +12,12 @@ export default async function DoctorTreatmentPage({
 	patientId: string;
 	appointmentId?: string;
 }) {
-	const res = await fetch(`http://localhost:3000/api/patient/${patientId}`, {
-		cache: "no-cache",
-	});
+	const res = await fetch(
+		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/patient/${patientId}`,
+		{
+			cache: "no-cache",
+		}
+	);
 	const patient: patient = await res.json();
 	const doctor = await getServerSession(options);
 

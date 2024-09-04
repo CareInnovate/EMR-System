@@ -1,4 +1,4 @@
-import { ReceptionistRegister } from "@/app/_pages/receptionist/register/page";
+import ReceptionistRegister from "@/app/_pages/receptionist/register/page";
 import Unauthorized from "@/app/_pages/Unauthorized";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { getServerSession } from "next-auth";

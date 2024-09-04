@@ -7,7 +7,7 @@ import { headers } from "next/headers";
 const DoctorAppointments = async () => {
 	const user = await getServerSession(options);
 	const appointments: doctorAppointment[] = await fetch(
-		`http://localhost:3000/api/appointments/`,
+		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments/`,
 		{
 			headers: headers(),
 		}

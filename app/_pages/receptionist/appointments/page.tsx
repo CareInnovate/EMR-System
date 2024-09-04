@@ -3,11 +3,11 @@ import { options } from "@/app/api/auth/[...nextauth]/options";
 import { doctor } from "@/app/api/doctors/[dept]/route";
 import { getServerSession } from "next-auth";
 
-export async function ReceptionistAppointments() {
+export default async function ReceptionistAppointments() {
 	const user = await getServerSession(options);
 	const deptId = user?.user.deptId as string;
 	const doctors: doctor[] = await fetch(
-		`http://localhost:3000/api/doctors/${deptId}`
+		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/doctors/${deptId}`
 	).then((res) => res.json());
 	const resources = doctors.map((doctor) => ({
 		id: doctor.id,

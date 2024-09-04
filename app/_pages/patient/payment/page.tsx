@@ -8,7 +8,7 @@ import { Fragment, ReactElement } from "react";
 export default async function PatientPayment() {
 	const user = await getServerSession(options);
 	const res = await fetch(
-		`http://localhost:3000/api/patient/${user?.user.id}/invoices`
+		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/patient/${user?.user.id}/invoices`
 	);
 	const {
 		dueInvoices,

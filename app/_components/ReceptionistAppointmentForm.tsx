@@ -7,7 +7,7 @@ import { useConfirm } from "../_hooks/useConfirm";
 import PatientSearch from "./Appointment/PatientSearch";
 import { Patient } from "@prisma/client";
 import { patientAppointment } from "../api/appointments/route";
-import { isAppointment } from "../_pages/patient/appointments/page";
+import { isAppointment } from "../_pages/patient/appointments/PatientAppointments";
 import { event } from "./Calendar";
 
 type props = {
@@ -53,7 +53,9 @@ const ReceptionistAppointmentForm = ({ setEvents, popup, setPopup }: props) => {
 									patientId: patient.id,
 								};
 								const res = await fetch(
-									`http://localhost:3000/api/appointments/${formData.get(
+									`${
+										process.env.VERCEL_URL
+									}api/appointments/${formData.get(
 										"department"
 									)}`,
 									{

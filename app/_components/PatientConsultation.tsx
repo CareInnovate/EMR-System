@@ -58,15 +58,18 @@ const PatientConsultation = ({
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();
 
 	async function handleSave() {
-		const res = await fetch("http://localhost:3000/api/medicalRecord", {
-			method: "POST",
-			body: JSON.stringify({
-				patientId: patientId,
-				doctorId: doctorId,
-				appointmentId: appointmentId,
-				data: data,
-			}),
-		});
+		const res = await fetch(
+			`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/medicalRecord`,
+			{
+				method: "POST",
+				body: JSON.stringify({
+					patientId: patientId,
+					doctorId: doctorId,
+					appointmentId: appointmentId,
+					data: data,
+				}),
+			}
+		);
 		const apiData = await res.json();
 		if (!res.ok) {
 			console.log("been here");

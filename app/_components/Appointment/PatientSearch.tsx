@@ -27,7 +27,9 @@ export default function PatientSearch({
 		};
 		const searchParams = new URLSearchParams(input);
 		const res = await fetch(
-			`http://localhost:3000/api/patients?${searchParams.toString()}`
+			`https://${
+				process.env.VERCEL_URL
+			}/api/patients?${searchParams.toString()}`
 		);
 		const data = await res.json();
 		setPatients(data);

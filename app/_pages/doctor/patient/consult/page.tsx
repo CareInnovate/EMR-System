@@ -9,9 +9,12 @@ export default async function DoctorTreatmentPage({
 		id: string;
 	};
 }) {
-	const res = await fetch(`http://localhost:3000/api/patient/${params.id}`, {
-		cache: "no-cache",
-	});
+	const res = await fetch(
+		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/patient/${params.id}`,
+		{
+			cache: "no-cache",
+		}
+	);
 	const patient: patient = await res.json();
 	return (
 		<main className="w-3/4 mt-24 flex flex-col mx-auto gap-5 h-3/4 sm:text-lg text-sm">

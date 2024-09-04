@@ -66,4 +66,5 @@ export const options: NextAuthOptions = {
 			return session;
 		},
 	},
+	debug: true,
 };

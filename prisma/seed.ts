@@ -396,12 +396,14 @@ async function main() {
 	await prisma.medication.createMany({
 		data: [
 			{
+				id: "med-1",
 				name: "Advil",
 				description: "Also known as Ibuprofen",
 				price: 7.99,
 				available: 50,
 			},
 			{
+				id: "med-2",
 				name: "Tylenol",
 				description: "Also known as Acetaminophen",
 				price: 8.99,
@@ -847,7 +849,7 @@ async function main() {
 			},
 		],
 	});
-	
+
 	await prisma.invoice.createMany({
 		data: [
 			{
@@ -948,8 +950,6 @@ async function main() {
 			},
 		],
 	});
-
-	
 }
 
 main()
