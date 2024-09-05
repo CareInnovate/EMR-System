@@ -9,8 +9,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Patient {
@@ -146,7 +147,7 @@ model OTP {
 model Prescription {
   id              String        @id @default(uuid())
   dosage          String
-  duration        String
+  duration        Int
   quantity        Int           @default(1)
   instruction     String?
   medication      Medication    @relation(fields: [medicationId], references: [id])
