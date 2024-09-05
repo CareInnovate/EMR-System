@@ -1,13 +1,98 @@
-import {
-	faCalendarDay,
-	faClock,
-	faPhone,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDay, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import Calendar from "@/app/_components/Calendar";
+import { getServerSession } from "next-auth";
+import { options } from "@/app/api/auth/[...nextauth]/options";
+import { doctorAppointment } from "@/app/api/appointments/route";
+import { headers } from "next/headers";
+import { ReactNode } from "react";
 
-export default function DoctorDashboard() {
+export default async function DoctorDashboard() {
+	const user = await getServerSession(options);
+	const appointments: doctorAppointment[] = await fetch(
+		`http://localhost:3000/api/appointments/`,
+		{
+			headers: headers(),
+		}
+	).then((res) => res.json());
+	const recentApps = appointments.reduce<ReactNode[]>((acc, cur) => {
+		if (new Date(cur.datetime) <= new Date()) {
+			const datetime = new Date(cur.datetime);
+			const now = new Date();
+			const component = (
+				<Link
+					href={`/patients/${cur.patientId}?appId=${cur.id}`}
+					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+				>
+					<h1 className="text-xl font-semibold">{`${
+						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
+					} ${cur.patient.firstName} ${cur.patient.middleName}`}</h1>
+					<div className="flex text-gray-600 justify-between flex-wrap gap-4">
+						<div className="flex gap-2 items-center">
+							<FontAwesomeIcon icon={faCalendarDay} />
+							<p>
+								{datetime.getDate() === now.getDate()
+									? "Today"
+									: datetime.getDate() === now.getDate() + 1
+									? "Tomorrow"
+									: datetime.toLocaleDateString()}
+							</p>
+						</div>
+						<div className="flex gap-2 items-center">
+							<FontAwesomeIcon icon={faClock} />
+							<p>
+								{datetime.toLocaleTimeString("en-US", {
+									hour: "2-digit",
+									minute: "2-digit",
+								})}
+							</p>
+						</div>
+					</div>
+				</Link>
+			);
+			return [acc, component];
+		}
+		return acc;
+	}, []);
+	const upcomingApps = appointments.reduce<ReactNode[]>((acc, cur) => {
+		if (new Date(cur.datetime) > new Date()) {
+			const datetime = new Date(cur.datetime);
+			const now = new Date();
+			const component = (
+				<Link
+					href={`/patients/${cur.patientId}?appId=${cur.id}`}
+					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+				>
+					<h1 className="text-xl font-semibold">{`${
+						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
+					} ${cur.patient.firstName} ${cur.patient.middleName}`}</h1>
+					<div className="flex text-gray-800 justify-between flex-wrap gap-4">
+						<div className="flex gap-2 items-center">
+							<FontAwesomeIcon icon={faCalendarDay} />
+							<p>
+								{datetime.getDate() === now.getDate()
+									? "Today"
+									: datetime.getDate() === now.getDate() + 1
+									? "Tomorrow"
+									: datetime.toLocaleDateString()}
+							</p>
+						</div>
+						<div className="flex gap-2 items-center">
+							<FontAwesomeIcon icon={faClock} />
+							<p>
+								{datetime.toLocaleTimeString("en-US", {
+									hour: "2-digit",
+									minute: "2-digit",
+								})}
+							</p>
+						</div>
+					</div>
+				</Link>
+			);
+			return [acc, component];
+		}
+		return acc;
+	}, []);
 	return (
 		<main className="w-full pt-24 grid grid-cols-1 lg:grid-cols-3 justify-center gap-5 py-4 px-10 box-border min-h-full">
 			<div className="flex flex-col w-full gap-4 col-span-1 lg:col-span-2">
@@ -20,7 +105,9 @@ export default function DoctorDashboard() {
 							<h1 className="text-lg h-1/3">
 								Total upcoming appointments
 							</h1>
-							<p className="text-5xl h-full">4</p>
+							<p className="text-5xl h-full">
+								{upcomingApps.length}
+							</p>
 						</Link>
 					</div>
 					<div className="p-5 rounded-2xl flex flex-col bg-blue-700 text-white gap-4 w-full h-48 justify-center">
@@ -42,43 +129,8 @@ export default function DoctorDashboard() {
 						Upcoming appointments
 					</h1>
 					<div className="h-full flex flex-col gap-3">
-						{true ? (
-							<>
-								<div className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2">
-									<h1 className="text-xl font-semibold">
-										Mr. John Wick
-									</h1>
-									<div className="flex text-gray-800 justify-between flex-wrap gap-4">
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon
-												icon={faCalendarDay}
-											/>
-											<p>Today</p>
-										</div>
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon icon={faClock} />
-											<p>08:00 AM</p>
-										</div>
-									</div>
-								</div>
-								<div className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2">
-									<h1 className="text-xl font-semibold">
-										Mr. John Wick
-									</h1>
-									<div className="flex text-gray-800 justify-between flex-wrap gap-4">
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon
-												icon={faCalendarDay}
-											/>
-											<p>Today</p>
-										</div>
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon icon={faClock} />
-											<p>09:00 AM</p>
-										</div>
-									</div>
-								</div>
-							</>
+						{upcomingApps.length > 0 ? (
+							upcomingApps
 						) : (
 							<div className="flex justify-center items-center h-full">
 								<p className="text-2xl text-gray-400">
@@ -95,26 +147,8 @@ export default function DoctorDashboard() {
 						Recent patients
 					</h1>
 					<div className="h-full flex flex-col gap-3">
-						{true ? (
-							<>
-								<div className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2">
-									<h1 className="text-xl font-semibold">
-										Mr. Wallace Green
-									</h1>
-									<div className="flex text-gray-600 justify-between flex-wrap gap-4">
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon
-												icon={faCalendarDay}
-											/>
-											<p>Today</p>
-										</div>
-										<div className="flex gap-2 items-center">
-											<FontAwesomeIcon icon={faClock} />
-											<p>07:00 AM</p>
-										</div>
-									</div>
-								</div>
-							</>
+						{recentApps.length > 0 ? (
+							recentApps
 						) : (
 							<div className="flex justify-center items-center h-full">
 								<p className="text-2xl text-gray-400">

@@ -6,7 +6,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
 import Calendar from "@/app/_components/Calendar";
-import { ReceptionistAppointments } from "../appointments/page";
 import { getServerSession } from "next-auth";
 import { options } from "@/app/api/auth/[...nextauth]/options";
 import { doctor } from "@/app/api/doctors/[dept]/route";

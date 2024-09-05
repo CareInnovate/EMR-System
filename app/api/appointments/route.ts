@@ -6,6 +6,7 @@ import { Prisma } from "@prisma/client";
 
 export async function GET() {
 	const user = await getServerSession(options);
+	const now = new Date();
 	switch (user?.user.role) {
 		case "Patient":
 			const patientApp = await prisma.appointment.findMany({
@@ -46,6 +47,19 @@ export async function GET() {
 									sex: true,
 								},
 							},
+						},
+						where: {
+							datetime: {
+								gt: new Date(
+									now.getTime() - 7 * 24 * 60 * 60 * 1000
+								),
+								lt: new Date(
+									now.getTime() + 7 * 24 * 60 * 60 * 1000
+								),
+							},
+						},
+						orderBy: {
+							datetime: "desc",
 						},
 					},
 				},
