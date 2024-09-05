@@ -21,6 +21,16 @@ export async function GET() {
 									firstName: true,
 									middleName: true,
 									department: true,
+									sex: true,
+								},
+							},
+						},
+					},
+					MedicalRecord: {
+						include: {
+							prescription: {
+								include: {
+									medication: true,
 								},
 							},
 						},
@@ -92,6 +102,16 @@ export type patientAppointment = Prisma.AppointmentGetPayload<{
 						firstName: true;
 						middleName: true;
 						department: true;
+						sex: true;
+					};
+				};
+			};
+		};
+		MedicalRecord: {
+			include: {
+				prescription: {
+					include: {
+						medication: true;
 					};
 				};
 			};
