@@ -50,7 +50,7 @@ export default async function DoctorDashboard() {
 					</div>
 				</Link>
 			);
-			return [acc, component];
+			return [...acc, component];
 		}
 		return acc;
 	}, []);
@@ -89,7 +89,7 @@ export default async function DoctorDashboard() {
 					</div>
 				</Link>
 			);
-			return [acc, component];
+			return [...acc, component];
 		}
 		return acc;
 	}, []);
