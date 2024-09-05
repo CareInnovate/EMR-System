@@ -25,7 +25,11 @@ const Prescription = ({ data, setData }: props) => {
 		"2 tablet, 2x per day",
 		"2 tablet, 3x per day",
 	];
-	const durations = ["5 days", "1 week", "2 weeks"];
+	const durations = [
+		{ key: "5 days", value: 5 * 24 * 60 * 60 * 1000 },
+		{ key: "1 week", value: 7 * 24 * 60 * 60 * 1000 },
+		{ key: "2 weeks", value: 14 * 24 * 60 * 60 * 1000 },
+	];
 	function handleSave() {
 		if (medication === undefined) {
 			return setError("You didn't select a medication");
@@ -43,7 +47,7 @@ const Prescription = ({ data, setData }: props) => {
 						...prev.prescription,
 						{
 							dosage: dosages[dosage],
-							duration: durations[duration],
+							duration: durations[duration].value,
 							medication: medication,
 							quantity: parseInt(
 								quantity.current?.value as string
@@ -178,7 +182,7 @@ const Prescription = ({ data, setData }: props) => {
 												key={ind}
 												onClick={() => setDuration(ind)}
 											>
-												{dose}
+												{dose.key}
 											</div>
 										);
 									})}
