@@ -22,14 +22,12 @@ export default async function RootLayout({
 }>) {
 	const user = await getServerSession(options);
 	return (
-		<html lang="en">
-			<body className={inter.className}>
-				<Nav />
-				<div className="w-full absolute top-0 flex h-[100vh] items-start justify-start">
-					<Aside role={user?.user.role as string} />
-					{children}
-				</div>
-			</body>
-		</html>
+		<>
+			<Nav />
+			<div className="w-full absolute top-0 flex h-[100vh] items-start justify-start">
+				<Aside role={user?.user.role as string} />
+				{children}
+			</div>
+		</>
 	);
 }
