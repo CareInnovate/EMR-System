@@ -1,14 +1,11 @@
 import { faCalendarDay, faClock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { options } from "@/app/api/auth/[...nextauth]/options";
 import { doctorAppointment } from "@/app/api/appointments/route";
 import { headers } from "next/headers";
 import { ReactNode } from "react";
 
 export default async function DoctorDashboard() {
-	const user = await getServerSession(options);
 	const appointments: doctorAppointment[] = await fetch(
 		`http://localhost:3000/api/appointments/`,
 		{
@@ -23,6 +20,7 @@ export default async function DoctorDashboard() {
 				<Link
 					href={`/patients/${cur.patientId}?appId=${cur.id}`}
 					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+					key={cur.id}
 				>
 					<h1 className="text-xl font-semibold">{`${
 						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
@@ -62,6 +60,7 @@ export default async function DoctorDashboard() {
 				<Link
 					href={`/patients/${cur.patientId}?appId=${cur.id}`}
 					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+					key={cur.id}
 				>
 					<h1 className="text-xl font-semibold">{`${
 						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
