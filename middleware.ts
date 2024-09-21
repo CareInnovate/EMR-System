@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
 	const isLoggedIn = request.cookies.get("next-auth.session-token");
-	if (isLoggedIn) {
+	if (isLoggedIn || request.nextUrl.pathname === "/") {
 		return NextResponse.next();
 	}
 	const url = new URL("/signin", "http://localhost:3000");
