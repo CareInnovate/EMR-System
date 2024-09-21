@@ -15,10 +15,18 @@ export default async function Appointments() {
 			const departments: Department[] = await fetch(
 				`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/departments`
 			).then((res) => res.json());
+			const requestHeaders = headers();
+
+			const fetchHeaders = new Headers();
+			fetchHeaders.set(
+				"Authorization",
+				requestHeaders.get("Authorization") as string
+			);
+			fetchHeaders.set("Content-Type", "application/json");
 			const appointments: patientAppointment[] = await fetch(
 				`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments`,
 				{
-					headers: headers(),
+					headers: fetchHeaders,
 				}
 			).then((res) => res.json());
 			return (

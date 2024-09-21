@@ -29,7 +29,7 @@ const SearchBox = ({
 			});
 			const res = await fetch(
 				`${
-					process.env.VERCEL_URL
+					process.env.NEXT_PUBLIC_VERCEL_URL
 				}api/${fetchUrl}?${searchParams.toString()}`
 			);
 			const data = await res.json();

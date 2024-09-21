@@ -147,7 +147,7 @@ model OTP {
 model Prescription {
   id              String        @id @default(uuid())
   dosage          String
-  duration        String
+  duration        Int
   quantity        Int           @default(1)
   instruction     String?
   medication      Medication    @relation(fields: [medicationId], references: [id])

@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
 	const isLoggedIn = request.cookies.get("__Secure-next-auth.session-token");
-	if (isLoggedIn) {
+	if (isLoggedIn || request.nextUrl.pathname === "/") {
 		return NextResponse.next();
 	}
-	const base = `https://${process.env.VERCEL_URL}`;
+	const base = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
 	const redirect = new URLSearchParams({
 		callbackUrl: `https://${base}/dashboard`,
 	});

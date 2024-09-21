@@ -24,6 +24,7 @@ const registerPatientSchema = z.object({
 });
 export async function registerPatient(initialState: any, formData: FormData) {
 	const birthDate = new Date(formData.get("birthDate") as string);
+	const password = generatePassword(8);
 	const data = {
 		birthDate: birthDate,
 		city: formData.get("city") as string,
@@ -41,7 +42,7 @@ export async function registerPatient(initialState: any, formData: FormData) {
 		emergencyContactMobileNo: formData.get(
 			"emergencyContactPhone"
 		) as string,
-		password: "",
+		password: password,
 	};
 	const parsed = registerPatientSchema.safeParse(data);
 	if (!parsed.success) {
@@ -114,4 +115,18 @@ export async function registerStaff(formData: FormData) {
 			}, //If Doctor
 		},
 	});
+}
+function generatePassword(length: number): string {
+	let result = "";
+	const characters =
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	const charactersLength = characters.length;
+	let counter = 0;
+	while (counter < length) {
+		result += characters.charAt(
+			Math.floor(Math.random() * charactersLength)
+		);
+		counter += 1;
+	}
+	return result;
 }

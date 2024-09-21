@@ -104,6 +104,7 @@ async function main() {
 			},
 		],
 	});
+
 	await prisma.patient.createMany({
 		data: [
 			{

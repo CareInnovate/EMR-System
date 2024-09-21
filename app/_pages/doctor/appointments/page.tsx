@@ -6,10 +6,19 @@ import { headers } from "next/headers";
 
 const DoctorAppointments = async () => {
 	const user = await getServerSession(options);
+	const requestHeaders = headers();
+
+	const fetchHeaders = new Headers();
+	fetchHeaders.set(
+		"Authorization",
+		requestHeaders.get("Authorization") as string
+	);
+	fetchHeaders.set("Content-Type", "application/json");
+	console.log(process.env.NEXT_PUBLIC_VERCEL_URL);
 	const appointments: doctorAppointment[] = await fetch(
 		`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments/`,
 		{
-			headers: headers(),
+			headers: fetchHeaders,
 		}
 	).then((res) => res.json());
 	const resources: resource[] = [

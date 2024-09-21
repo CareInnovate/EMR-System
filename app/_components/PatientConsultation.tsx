@@ -27,7 +27,7 @@ export type examinationData = {
 export type prescriptionData = {
 	medication: Medication;
 	dosage: string;
-	duration: string;
+	duration: number;
 	quantity: number;
 	instruction?: string;
 };

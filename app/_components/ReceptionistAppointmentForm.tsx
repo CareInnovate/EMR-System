@@ -54,7 +54,7 @@ const ReceptionistAppointmentForm = ({ setEvents, popup, setPopup }: props) => {
 								};
 								const res = await fetch(
 									`${
-										process.env.VERCEL_URL
+										process.env.NEXT_PUBLIC_VERCEL_URL
 									}api/appointments/${formData.get(
 										"department"
 									)}`,

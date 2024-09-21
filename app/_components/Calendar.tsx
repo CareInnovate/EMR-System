@@ -31,8 +31,6 @@ type props = {
 	fullWidth?: boolean;
 };
 
-//TODO: add a way to create and edit appointments by double clicking
-//on empty slots and submitting forms
 const Calendar = ({ resources, initialEvents, fullWidth }: props) => {
 	const localizer = momentLocalizer(moment);
 	const { open, handleConfirm, handleCancel, confirm } = useConfirm();

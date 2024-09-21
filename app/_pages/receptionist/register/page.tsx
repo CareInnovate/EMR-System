@@ -40,8 +40,8 @@ export default function ReceptionistRegister() {
 						<p className="text-gray-600 text-xl">{state.message}</p>
 
 						{state.password && (
-							<p>
-								The patient`&apos;`s temporary password is
+							<p className="text-gray-600 text-xl">
+								The patient&apos;s temporary password is{" "}
 								<strong>{state.password}</strong>
 							</p>
 						)}
