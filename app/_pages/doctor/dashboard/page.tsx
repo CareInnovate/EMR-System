@@ -20,86 +20,96 @@ export default async function DoctorDashboard() {
 			headers: fetchHeaders,
 		}
 	).then((res) => res.json());
-	const recentApps = appointments.reduce<ReactNode[]>((acc, cur) => {
-		if (new Date(cur.datetime) <= new Date()) {
-			const datetime = new Date(cur.datetime);
-			const now = new Date();
-			const component = (
-				<Link
-					href={`/patients/${cur.patientId}?appId=${cur.id}`}
-					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
-					key={cur.id}
-				>
-					<h1 className="text-xl font-semibold">{`${
-						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
-					} ${cur.patient.firstName} ${cur.patient.middleName}`}</h1>
-					<div className="flex text-gray-600 justify-between flex-wrap gap-4">
-						<div className="flex gap-2 items-center">
-							<FontAwesomeIcon icon={faCalendarDay} />
-							<p>
-								{datetime.getDate() === now.getDate()
-									? "Today"
-									: datetime.getDate() === now.getDate() + 1
-									? "Tomorrow"
-									: datetime.toLocaleDateString()}
-							</p>
-						</div>
-						<div className="flex gap-2 items-center">
-							<FontAwesomeIcon icon={faClock} />
-							<p>
-								{datetime.toLocaleTimeString("en-US", {
-									hour: "2-digit",
-									minute: "2-digit",
-								})}
-							</p>
-						</div>
-					</div>
-				</Link>
-			);
-			return [...acc, component];
-		}
-		return acc;
-	}, []);
-	const upcomingApps = appointments.reduce<ReactNode[]>((acc, cur) => {
-		if (new Date(cur.datetime) > new Date()) {
-			const datetime = new Date(cur.datetime);
-			const now = new Date();
-			const component = (
-				<Link
-					href={`/patients/${cur.patientId}?appId=${cur.id}`}
-					className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
-					key={cur.id}
-				>
-					<h1 className="text-xl font-semibold">{`${
-						cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
-					} ${cur.patient.firstName} ${cur.patient.middleName}`}</h1>
-					<div className="flex text-gray-800 justify-between flex-wrap gap-4">
-						<div className="flex gap-2 items-center">
-							<FontAwesomeIcon icon={faCalendarDay} />
-							<p>
-								{datetime.getDate() === now.getDate()
-									? "Today"
-									: datetime.getDate() === now.getDate() + 1
-									? "Tomorrow"
-									: datetime.toLocaleDateString()}
-							</p>
-						</div>
-						<div className="flex gap-2 items-center">
-							<FontAwesomeIcon icon={faClock} />
-							<p>
-								{datetime.toLocaleTimeString("en-US", {
-									hour: "2-digit",
-									minute: "2-digit",
-								})}
-							</p>
-						</div>
-					</div>
-				</Link>
-			);
-			return [...acc, component];
-		}
-		return acc;
-	}, []);
+	const recentApps = Array.isArray(appointments)
+		? appointments.reduce<ReactNode[]>((acc, cur) => {
+				if (new Date(cur.datetime) <= new Date()) {
+					const datetime = new Date(cur.datetime);
+					const now = new Date();
+					const component = (
+						<Link
+							href={`/patients/${cur.patientId}?appId=${cur.id}`}
+							className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+							key={cur.id}
+						>
+							<h1 className="text-xl font-semibold">{`${
+								cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
+							} ${cur.patient.firstName} ${
+								cur.patient.middleName
+							}`}</h1>
+							<div className="flex text-gray-600 justify-between flex-wrap gap-4">
+								<div className="flex gap-2 items-center">
+									<FontAwesomeIcon icon={faCalendarDay} />
+									<p>
+										{datetime.getDate() === now.getDate()
+											? "Today"
+											: datetime.getDate() ===
+											  now.getDate() + 1
+											? "Tomorrow"
+											: datetime.toLocaleDateString()}
+									</p>
+								</div>
+								<div className="flex gap-2 items-center">
+									<FontAwesomeIcon icon={faClock} />
+									<p>
+										{datetime.toLocaleTimeString("en-US", {
+											hour: "2-digit",
+											minute: "2-digit",
+										})}
+									</p>
+								</div>
+							</div>
+						</Link>
+					);
+					return [...acc, component];
+				}
+				return acc;
+		  }, [])
+		: [];
+	const upcomingApps = Array.isArray(appointments)
+		? appointments.reduce<ReactNode[]>((acc, cur) => {
+				if (new Date(cur.datetime) > new Date()) {
+					const datetime = new Date(cur.datetime);
+					const now = new Date();
+					const component = (
+						<Link
+							href={`/patients/${cur.patientId}?appId=${cur.id}`}
+							className="rounded-md flex overflow-hidden flex-col sm:flex-row justify-between bg-blue-100 text-blue-900 p-4 gap-2"
+							key={cur.id}
+						>
+							<h1 className="text-xl font-semibold">{`${
+								cur.patient.sex === "MALE" ? "Mr." : "Mrs./Ms."
+							} ${cur.patient.firstName} ${
+								cur.patient.middleName
+							}`}</h1>
+							<div className="flex text-gray-800 justify-between flex-wrap gap-4">
+								<div className="flex gap-2 items-center">
+									<FontAwesomeIcon icon={faCalendarDay} />
+									<p>
+										{datetime.getDate() === now.getDate()
+											? "Today"
+											: datetime.getDate() ===
+											  now.getDate() + 1
+											? "Tomorrow"
+											: datetime.toLocaleDateString()}
+									</p>
+								</div>
+								<div className="flex gap-2 items-center">
+									<FontAwesomeIcon icon={faClock} />
+									<p>
+										{datetime.toLocaleTimeString("en-US", {
+											hour: "2-digit",
+											minute: "2-digit",
+										})}
+									</p>
+								</div>
+							</div>
+						</Link>
+					);
+					return [...acc, component];
+				}
+				return acc;
+		  }, [])
+		: [];
 	return (
 		<main className="w-full pt-24 grid grid-cols-1 lg:grid-cols-3 justify-center gap-5 py-4 px-10 box-border min-h-full">
 			<div className="flex flex-col w-full gap-4 col-span-1 lg:col-span-2">

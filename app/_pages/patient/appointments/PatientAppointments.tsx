@@ -173,74 +173,77 @@ export default function PatientAppointments({
 					</tr>
 				</thead>
 				<tbody>
-					{appointments.map((app) => {
-						const doctor = app.doctor.staff;
-						return (
-							<tr key={app.id}>
-								<td className="w-3/5">
-									Dr.{" "}
-									{`${doctor.firstName} ${doctor.middleName}`}
-								</td>
-								<td className="text-center">
-									{new Date(
-										app.datetime
-									).toLocaleDateString()}
-								</td>
-								<td className="text-center">
-									{new Date(
-										app.datetime
-									).toLocaleTimeString()}
-								</td>
-								<td className="text-center">
-									<button
-										onClick={() => {
-											setEdit({
-												appId: app.id,
-												dept: app.doctor.staff
-													.department?.id,
-												docId: app.doctorId,
-											});
-											setPopup(PopupTypes.Update);
-										}}
-									>
-										<FontAwesomeIcon
-											icon={faEdit}
-											className="mr-4"
-										/>
-									</button>
-									<button
-										onClick={async () => {
-											const res = await confirm();
-											if (res) {
-												const removedApp: patientAppointment =
-													await fetch(
-														`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments`,
-														{
-															method: "DELETE",
-															body: JSON.stringify(
-																app
-															),
-														}
-													).then((res) => res.json());
-												setAppointments((prev) =>
-													prev.filter(
-														(val) =>
-															val.id !==
-															removedApp.id
-													)
-												);
-											}
-										}}
-									>
-										<FontAwesomeIcon
-											icon={faTrash}
-											className="text-red-700"
-										/>
-									</button>
-								</td>
-							</tr>
-						);
-					})}
+					{Array.isArray(appointments) &&
+						appointments.map((app) => {
+							const doctor = app.doctor.staff;
+							return (
+								<tr key={app.id}>
+									<td className="w-3/5">
+										Dr.{" "}
+										{`${doctor.firstName} ${doctor.middleName}`}
+									</td>
+									<td className="text-center">
+										{new Date(
+											app.datetime
+										).toLocaleDateString()}
+									</td>
+									<td className="text-center">
+										{new Date(
+											app.datetime
+										).toLocaleTimeString()}
+									</td>
+									<td className="text-center">
+										<button
+											onClick={() => {
+												setEdit({
+													appId: app.id,
+													dept: app.doctor.staff
+														.department?.id,
+													docId: app.doctorId,
+												});
+												setPopup(PopupTypes.Update);
+											}}
+										>
+											<FontAwesomeIcon
+												icon={faEdit}
+												className="mr-4"
+											/>
+										</button>
+										<button
+											onClick={async () => {
+												const res = await confirm();
+												if (res) {
+													const removedApp: patientAppointment =
+														await fetch(
+															`https://${process.env.NEXT_PUBLIC_VERCEL_URL}/api/appointments`,
+															{
+																method: "DELETE",
+																body: JSON.stringify(
+																	app
+																),
+															}
+														).then((res) =>
+															res.json()
+														);
+													setAppointments((prev) =>
+														prev.filter(
+															(val) =>
+																val.id !==
+																removedApp.id
+														)
+													);
+												}
+											}}
+										>
+											<FontAwesomeIcon
+												icon={faTrash}
+												className="text-red-700"
+											/>
+										</button>
+									</td>
+								</tr>
+							);
+						})}
 				</tbody>
 			</table>
 			<div className="mt-8 w-3/4 flex justify-end mr-2">
