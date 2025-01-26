@@ -17,7 +17,7 @@ This is a full-stack **Electronic Medical Records (EMR) system** I built using *
 
 ✅ **Authentication & Security** – Uses **NextAuth** with phone-based login and auto-generated passwords for patients.
 
-🔲 **Billing & Invoicing** – Handles payments and invoices for hospital services.
+🔲 **Billing & Invoicing** – Handles payments and invoices for hospital services..
 
 🔲 **Inventory Management** – Still working on tracking medication and supplies to ensure proper stock levels.
 
